@@ -9,4 +9,16 @@ The features of this script are:
 - Delete Passwords that you have saved.
 - Have Master Passwords (which you must create first) to access all these features.
 
+Installation:
+
+pip install -r requirements.txt
+
+Possible known bugs(?):
+
+- Sometimes each device may have different encryption and decryption algorithms, so sometimes passwords that have been encrypted on certain devices, when transferred to other devices will be detected or not detected.
+
+- Sometimes the master password that we have created after some time, somehow can not be detected.
+
+The above bug is not necessarily true, because I still haven't done tests to explore it, but there is a possibility that the bug is true. If the bug is true, please let me know in the "Issues" section, and I apologize for the inconvenience =(
+
 DISCLAIMER!!! - THIS SCRIPT WAS CREATED WITH THE HELP OF AI!!!
