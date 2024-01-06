@@ -13,7 +13,8 @@ The features of this script are:
 
 Installation:
 
-pip install -r requirements.txt
+1. git clone https://github.com/TheRebo/Password-Manager.git
+2. pip install -r requirements.txt / pip3 install -r requirements.txt
 
 
 Possible known bugs(?):
