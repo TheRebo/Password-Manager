@@ -37,7 +37,7 @@ Changelog:
 
 NOTES!!! (Please read this so that there is no misunderstanding) :
 
-This Script will create 3 files after you enter your Master Password.
+This Script will create 3 files after you create your Master Password.
 The list of files created by the Script are:
 
 - key.dat (To save the key that will be used when decrypting the password)
