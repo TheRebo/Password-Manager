@@ -41,7 +41,7 @@ This Script will create 3 files after you create your Master Password.
 The list of files created by the Script are:
 
 - key.dat (To save the key that will be used when decrypting the password)
-- master_password.dat (To save the Master Password you entered)
+- master_password.dat (To save the Master Password you created)
 - passwords.dat (To save a list of your saved passwords, along with encrypted passwords)
 
 So... DON'T DELETE THE FILES, IF YOU DON'T WANT TO LOSE YOUR PASSWORDS DATA!!!.
