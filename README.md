@@ -1,49 +1,49 @@
 # Password-Manager
 
-This script is useful for storing your Passwords.
+Skrip ini berguna untuk menyimpan Kata Sandi Anda.
+
+Fitur-fitur dari skrip ini adalah:
+
+- Menyimpan Kata Sandi Anda dan kemudian mengenkripsinya dengan metode terkuat.
+- Melihat Kata Sandi yang telah Anda simpan.
+- Menghapus Password yang telah Anda simpan.
+- Memiliki Master Password (yang nantinya harus Anda buat terlebih dahulu) untuk mengakses semua fitur ini.
 
 
-The features of this script are:
+Instalasi:
 
-- Stores Passwords and then encrypts them with the strongest method.
-- View Passwords that you have saved.
-- Delete Passwords that you have saved.
-- Have Master Passwords (which you must create first) to access all these features.
+- Memerlukan Python (mungkin semua versi bisa digunakan, tetapi saya tidak tahu (saya menggunakan Python 3.11)).
 
-
-Installation:
-
-- Requires Python (maybe all versions will work, but I don't know (I'm using Python 3.11)).
-1. git clone https://github.com/TheRebo/Password-Manager.git
+1. git clone --branch Bahasa-Indonesia --single-branch https://github.com/TheRebo/Password-Manager.git
 2. pip install -r requirements.txt / pip3 install -r requirements.txt
 
 
-Possible known bugs(?):
+Kemungkinan bug yang diketahui(?):
 
-- Sometimes each device may have different encryption and decryption algorithms, so sometimes passwords that have been encrypted on certain devices, when transferred to other devices will be detected or not detected.
+- Terkadang setiap perangkat mungkin memiliki algoritma enkripsi dan dekripsi yang berbeda, sehingga terkadang kata sandi yang telah dienkripsi pada perangkat tertentu, ketika ditransfer ke perangkat lain akan terdeteksi atau tidak terdeteksi.
+- Terkadang master password yang sudah kita buat setelah beberapa waktu, entah kenapa tidak bisa terdeteksi.
 
-- Sometimes the master password that we have created after some time, somehow can not be detected.
-
-The above bug is not necessarily true, because I still haven't done tests to explore it, but there is a possibility that the bug is true. If the bug is true, please let me know in the "Issues" section, and I apologize for the inconvenience =(
+Bug di atas belum tentu benar, karena saya masih belum melakukan tes untuk mendalami hal tersebut, namun ada kemungkinan bug tersebut benar adanya. Jika bug tersebut benar adanya, mohon beritahu saya di bagian "Issues", dan saya mohon maaf atas ketidaknyamanannya =( .
 
 
 Changelog:
 
-- 1.1.0 = Added Color and A Little Improvement
-- 1.0.2 = A Little Bugfix and A Little Improvement
-- 1.0.1 = A Little Bugfix
-- 1.0.0 = Initial Release
+- 1.1.0 = Penambahan Warna dan Sedikit Perbaikan Bug
+- 1.0.2 = Sedikit Perbaikan Bug dan Sedikit Peningkatan
+- 1.0.1 = Perbaikan Bug Kecil
+- 1.0.0 = Rilis Awal
 
 
-NOTES!!! (Please read this so that there is no misunderstanding) :
+CATATAN!!! (Mohon dibaca agar tidak terjadi kesalahpahaman):
 
-This Script will create 3 files after you create your Master Password.
-The list of files created by the Script are:
+Skrip ini akan membuat 3 file setelah Anda membuat Kata Sandi Utama.
+Daftar file yang dibuat oleh Skrip ini adalah:
 
-- key.dat (To save the key that will be used when decrypting the password)
-- master_password.dat (To save the Master Password you created)
-- passwords.dat (To save a list of your saved passwords, along with encrypted passwords)
+- key.dat (Untuk menyimpan kunci yang akan digunakan saat mendekripsi kata sandi Anda nantinya)
+- master_password.dat (Untuk menyimpan Kata Sandi Utama yang Anda buat)
+- passwords.dat (Untuk menyimpan daftar kata sandi yang sudah Anda simpan, bersama dengan kata sandinya yang terenkripsi)
 
-So... DON'T DELETE THE FILES, IF YOU DON'T WANT TO LOSE YOUR PASSWORDS DATA!!!.
+Jadi... JANGAN MENGHAPUS FILE-FILE TERSEBUT, JIKA ANDA TIDAK INGIN MENGHILANGKAN DATA KATA SANDI ANDA!!!.
 
-DISCLAIMER!!! - THIS SCRIPT WAS CREATED WITH THE HELP OF AI!!!
+
+DISCLAIMER!!! - SCRIPT INI DIBUAT DENGAN BANTUAN AI!!!
