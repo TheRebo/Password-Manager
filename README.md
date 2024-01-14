@@ -1,5 +1,7 @@
 # Password-Manager
 
+**(For Indonesian User, please check the Branch ^3^ / Untuk User Indonesia, tolong cek Branch-nya ^3^)**
+
 This script is useful for storing your Passwords.
 
 
