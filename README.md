@@ -16,7 +16,8 @@ The features of this script are:
 
 Installation:
 <p align="center"> <b>
-Requires Python (maybe all versions will work, but I don't know (I'm using Python 3.11)).
+Requires Python and pip!!!
+(maybe all versions will work, but I don't know (I'm using Python 3.11)).
 </b></p>
 
 1. ```
