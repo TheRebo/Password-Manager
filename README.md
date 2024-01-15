@@ -12,7 +12,8 @@ Fitur-fitur dari skrip ini adalah:
 
 Instalasi:
 <p align="center"><b>
-Memerlukan Python (mungkin semua versi bisa digunakan, tetapi saya tidak tahu (saya menggunakan Python 3.11)).
+Memerlukan Python dan pip!!! 
+(mungkin semua versi bisa digunakan, tetapi saya tidak tahu (saya menggunakan Python 3.11)).
 </b></p>
 
 1. ```
