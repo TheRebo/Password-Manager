@@ -53,7 +53,8 @@ The list of files created by the Script are:
 - master_password.dat (To save the Master Password you created)
 - passwords.dat (To save a list of your saved passwords, along with encrypted passwords)
 
-So... DON'T DELETE THE FILES, IF YOU DON'T WANT TO LOSE YOUR PASSWORDS DATA!!!.
+So... <b>DON'T DELETE THE FILES, IF YOU DON'T WANT TO LOSE YOUR PASSWORDS DATA!!!.</b>
+
 <p align="center"><b>
 DISCLAIMER!!! - THIS SCRIPT WAS CREATED WITH THE HELP OF AI!!!
 </b></p>
