@@ -1,6 +1,7 @@
 # Password-Manager
-
-**(For Indonesian User, please check the Branch ^3^ / Untuk User Indonesia, tolong cek Branch-nya ^3^)**
+<p align="center"> <b>
+(For Indonesian User, please check the Branch ^3^ / Untuk User Indonesia, tolong cek Branch-nya ^3^)
+</b></p>
 <p align="center">
 This script is useful for storing your Passwords.
 </p>
@@ -14,9 +15,10 @@ The features of this script are:
 
 
 Installation:
-<p align="center">
-**Requires Python (maybe all versions will work, but I don't know (I'm using Python 3.11)).**
-</p>
+<p align="center"> <b>
+Requires Python (maybe all versions will work, but I don't know (I'm using Python 3.11)).
+</b></p>
+
 1. ```
    git clone https://github.com/TheRebo/Password-Manager.git
    ```
@@ -41,9 +43,9 @@ Changelog:
 - 1.0.1 = A Little Bugfix
 - 1.0.0 = Initial Release
 
-
-NOTES!!! (Please read this so that there is no misunderstanding) :
-
+<p align="center"><b>
+NOTES!!! (Please read this so that there is no misunderstanding):
+</b></p>
 This Script will create 3 files after you create your Master Password.
 The list of files created by the Script are:
 
@@ -52,5 +54,6 @@ The list of files created by the Script are:
 - passwords.dat (To save a list of your saved passwords, along with encrypted passwords)
 
 So... DON'T DELETE THE FILES, IF YOU DON'T WANT TO LOSE YOUR PASSWORDS DATA!!!.
-
+<p align="center"><b>
 DISCLAIMER!!! - THIS SCRIPT WAS CREATED WITH THE HELP OF AI!!!
+</b></p>
