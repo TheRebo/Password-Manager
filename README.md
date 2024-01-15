@@ -1,9 +1,9 @@
 # Password-Manager
 
 **(For Indonesian User, please check the Branch ^3^ / Untuk User Indonesia, tolong cek Branch-nya ^3^)**
-
+<p align="center">
 This script is useful for storing your Passwords.
-
+</p>
 
 The features of this script are:
 
@@ -14,10 +14,15 @@ The features of this script are:
 
 
 Installation:
-
-- Requires Python (maybe all versions will work, but I don't know (I'm using Python 3.11)).
-1. git clone https://github.com/TheRebo/Password-Manager.git
-2. pip install -r requirements.txt / pip3 install -r requirements.txt
+<p align="center">
+**Requires Python (maybe all versions will work, but I don't know (I'm using Python 3.11)).**
+</p>
+1. ```
+   git clone https://github.com/TheRebo/Password-Manager.git
+   ```
+2. ```
+   pip install -r requirements.txt
+   ```
 
 
 Possible known bugs(?):
