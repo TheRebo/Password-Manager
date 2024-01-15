@@ -1,7 +1,7 @@
 # Password-Manager
-
+<p align="center">
 Skrip ini berguna untuk menyimpan Kata Sandi Anda.
-
+</p>
 Fitur-fitur dari skrip ini adalah:
 
 - Menyimpan Kata Sandi Anda dan kemudian mengenkripsinya dengan metode terkuat.
@@ -11,11 +11,16 @@ Fitur-fitur dari skrip ini adalah:
 
 
 Instalasi:
+<p align="center"><b>
+Memerlukan Python (mungkin semua versi bisa digunakan, tetapi saya tidak tahu (saya menggunakan Python 3.11)).
+</b></p>
 
-- Memerlukan Python (mungkin semua versi bisa digunakan, tetapi saya tidak tahu (saya menggunakan Python 3.11)).
-
-1. git clone --branch Bahasa-Indonesia --single-branch https://github.com/TheRebo/Password-Manager.git
-2. pip install -r requirements.txt / pip3 install -r requirements.txt
+1. ```
+   git clone --branch Bahasa-Indonesia --single-branch https://github.com/TheRebo/Password-Manager.git
+   ```
+2. ```
+   pip install -r requirements.txt
+   ```
 
 
 Kemungkinan bug yang diketahui(?):
@@ -33,9 +38,9 @@ Changelog:
 - 1.0.1 = Perbaikan Bug Kecil
 - 1.0.0 = Rilis Awal
 
-
+<p align="center"><b>
 CATATAN!!! (Mohon dibaca agar tidak terjadi kesalahpahaman):
-
+</b></p>
 Skrip ini akan membuat 3 file setelah Anda membuat Kata Sandi Utama.
 Daftar file yang dibuat oleh Skrip ini adalah:
 
@@ -43,7 +48,8 @@ Daftar file yang dibuat oleh Skrip ini adalah:
 - master_password.dat (Untuk menyimpan Kata Sandi Utama yang Anda buat)
 - passwords.dat (Untuk menyimpan daftar kata sandi yang sudah Anda simpan, bersama dengan kata sandinya yang terenkripsi)
 
-Jadi... JANGAN MENGHAPUS FILE-FILE TERSEBUT, JIKA ANDA TIDAK INGIN MENGHILANGKAN DATA KATA SANDI ANDA!!!.
+Jadi... <b>JANGAN MENGHAPUS FILE-FILE TERSEBUT, JIKA ANDA TIDAK INGIN MENGHILANGKAN DATA KATA SANDI ANDA!!!.</b>
 
-
+<p align="center"><b>
 DISCLAIMER!!! - SCRIPT INI DIBUAT DENGAN BANTUAN AI!!!
+</b></p>
