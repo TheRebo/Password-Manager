@@ -1,5 +1,5 @@
 #    Smart Password Manager - A Python script that lets you store, view, and delete passwords for different services.
-#    Copyright (C) 2024 TheRebo
+#    Copyright (C) 2023-2024 TheRebo
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as published
@@ -15,309 +15,436 @@
 #    along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 # Import the modules we need
-import os # For file operations
-import time # For the delay
-import hashlib # For hashing the master password
-import cryptography # For encrypting and decrypting the passwords
-from cryptography.fernet import Fernet # For generating the encryption key
-import pickle # For saving and loading the passwords file
-import random # For generating random passwords
-import string # For creating the password characters
-from colorama import init, Fore, Back, Style # For the color
-
-init() # Init color
+import os
+import time
+import hashlib
+import cryptography
+from cryptography.fernet import Fernet, InvalidToken
+import pickle
+import random
+import string
+from rich.console import Console
+from rich.table import Table
+from rich.panel import Panel
+from rich.prompt import Prompt, Confirm
+from rich.progress import Progress, BarColumn, TextColumn
+import sys
 
 # Define some constants
-PASSWORDS_FILE = "passwords.dat" # The name of the file where we store the passwords
-MASTER_PASSWORD_FILE = "master_password.dat" # The name of the file where we store the hashed master password
-KEY_FILE = "key.dat" # The name of the file where we store the encryption key
+PASSWORDS_FILE = "passwords.dat"
+MASTER_PASSWORD_FILE = "master_password.dat"
+KEY_FILE = "key.dat"
 
-# Define some delay and clear
-def clear_and_sleep():
-	time.sleep(1)
-	os.system('clear')
-	time.sleep(1)
+# Initialize rich console
+console = Console()
 
 # Define some functions
 def hash_password(password):
-	# This function takes a password and returns its hashed value using SHA-256 algorithm
-	# We use this function to create and verify the master password
-	password = password.encode() # Convert the password to bytes
-	hashed_password = hashlib.sha256(password).hexdigest() # Hash the password using SHA-256 and get the hexadecimal value
-	return hashed_password # Return the hashed password
+    # Hash password using SHA-256
+    password = password.encode()
+    hashed_password = hashlib.sha256(password).hexdigest()
+    return hashed_password
 
 def generate_key():
-	# This function generates a random encryption key using Fernet
-	# We use this function to create the key file when the script runs for the first time
-	key = Fernet.generate_key() # Generate a random key
-	return key # Return the key
+    # Generate a random encryption key
+    return Fernet.generate_key()
 
 def load_key():
-	# This function loads the encryption key from the key file
-	# We use this function to access the key when we need to encrypt or decrypt the passwords
-	with open(KEY_FILE, "rb") as file: # Open the key file in binary mode
-		key = file.read() # Read the key
-	return key # Return the key
+    # Load the encryption key from file
+    with open(KEY_FILE, "rb") as file:
+        key = file.read()
+    return key
 
-def encrypt_password(password):
-	# This function takes a password and returns its encrypted value using Fernet
-	# We use this function to encrypt the passwords before saving them to the passwords file
-	key = load_key() # Load the key
-	f = Fernet(key) # Create a Fernet object
-	password = password.encode() # Convert the password to bytes
-	encrypted_password = f.encrypt(password) # Encrypt the password using the key
-	return encrypted_password # Return the encrypted password
+def encrypt_data(data):  # Function now encrypts combined data
+    key = load_key()
+    f = Fernet(key)
+    data = data.encode()
+    encrypted_data = f.encrypt(data)
+    return encrypted_data
 
-def decrypt_password(encrypted_password):
-	# This function takes an encrypted password and returns its decrypted value using Fernet
-	# We use this function to decrypt the passwords when we want to view them
-	key = load_key() # Load the key
-	f = Fernet(key) # Create a Fernet object
-	decrypted_password = f.decrypt(encrypted_password) # Decrypt the password using the key
-	decrypted_password = decrypted_password.decode() # Convert the password to string
-	return decrypted_password # Return the decrypted password
+def decrypt_data(encrypted_data): 
+    # Decrypt data using Fernet with error handling
+    key = load_key()
+    f = Fernet(key)
+    try:
+        decrypted_data = f.decrypt(encrypted_data)
+        return decrypted_data.decode()
+    except InvalidToken:
+        console.print(Panel(
+            "[bold red]Error: Invalid data token. Decryption failed. :worried:[/]",
+            title="[bold red]Decryption Error",
+            title_align="center",
+            padding=(1, 2),
+            border_style="red"
+        ), justify="center")
+        pause_and_space()
+        return None  # or raise an exception for further handling
 
 def generate_password(length):
-	# This function generates a random password of a given length
-	# We use this function to create a strong password for the user if they want
-	characters = string.ascii_letters + string.digits + string.punctuation # Create a string of all possible characters
-	password = "" # Initialize an empty password
-	for i in range(length): # Loop for the given length
-		password += random.choice(characters) # Add a random character to the password
-	return password # Return the password
+    # Generate a random password
+    characters = string.ascii_letters + string.digits + string.punctuation
+    password = "".join(random.choice(characters) for _ in range(length))
+    return password
 
 def save_passwords(passwords):
-	# This function saves the passwords dictionary to the passwords file
-	# We use this function to update the passwords file whenever we add or delete a password
-	with open(PASSWORDS_FILE, "wb") as file: # Open the passwords file in binary mode
-		pickle.dump(passwords, file) # Dump the passwords dictionary to the file
+    # Save passwords dictionary to file
+    with open(PASSWORDS_FILE, "wb") as file:
+        pickle.dump(passwords, file)
 
 def load_passwords():
-	# This function loads the passwords dictionary from the passwords file
-	# We use this function to access the passwords whenever we need them
-	with open(PASSWORDS_FILE, "rb") as file: # Open the passwords file in binary mode
-		passwords = pickle.load(file) # Load the passwords dictionary from the file
-	return passwords # Return the passwords
+    # Load passwords dictionary from file
+    with open(PASSWORDS_FILE, "rb") as file:
+        passwords = pickle.load(file)
+    return passwords
+
+# Define a function to add pauses and spacing
+def pause_and_space():
+    time.sleep(1)  # Introduce a one-second pause
+    print()  # Add a blank line for spacing
 
 def create_master_password():
-	# This function creates the master password and saves its hashed value to the master password file
-	# We use this function when the script runs for the first time
-	clear_and_sleep()
-	print("[•] Welcome to the Smart Password Manager! 🙌") # Greet the user
-	print("[•] This is a Python script that lets you", Style.BRIGHT + "store, view, and delete passwords" + Style.RESET_ALL, "for different services.") # Explain the purpose of the script
-	print("[•] To get started, you need to create a", Style.BRIGHT + "Master Password" + Style.RESET_ALL + ".", "This password will be used to access your stored passwords later.") # Explain the need for a master password
-	print("[•] Please make sure you remember your Master Password, as there is", Back.RED + "no way to recover it" + Style.RESET_ALL, "if you forget it. 😬\n") # Warn the user about the importance of the master password
-	while True: # Loop until the user enters a valid master password
-		time.sleep(1)
-		master_password = input(Fore.YELLOW + "[?] Enter your Master Password: " + Style.RESET_ALL) # Ask the user to enter the master password
-		if len(master_password) < 8: # Check if the master password is too short
-			time.sleep(1)
-			print(Fore.RED + "\n[!] Your Master Password is too weak. It should be at least 8 characters long. 😕\n" + Style.RESET_ALL) # Tell the user to enter a longer password
-		else: # If the master password is long enough
-			confirm_password = input(Fore.YELLOW + "[?] Confirm your Master Password: " + Style.RESET_ALL) # Ask the user to confirm the master password
-			if master_password == confirm_password: # Check if the confirmation matches the master password
-				time.sleep(3)
-				print(Fore.GREEN + "\n[✓] Your Master Password has been created successfully! 🎉" + Style.RESET_ALL) # Congratulate the user
-				time.sleep(2)
-				clear_and_sleep()
-				hashed_password = hash_password(master_password) # Hash the master password
-				with open(MASTER_PASSWORD_FILE, "w") as file: # Open the master password file in write mode
-					file.write(hashed_password) # Write the hashed master password to the file
-				break # Break the loop
-			else: # If the confirmation does not match the master password
-				time.sleep(1)
-				print(Fore.RED + "\n[!] Your Master Passwords do not match. Please try again. 😞\n" + Style.RESET_ALL) # Tell the user to enter the master password again
+    # Create and save master password
+    os.system('clear')
+    time.sleep(1)
+
+    console.print(Panel(
+        "[bold green]Welcome to the Smart Password Manager! :smiley:[/]\n\n"
+        "This script lets you securely store, view, and manage your passwords for different services. "
+        "To get started, you'll need to create a strong Master Password.\n\n"
+        "[bold red]Remember, your Master Password is the key to all your stored passwords. "
+        "There's no way to recover it if you forget it! :fearful:[/]",
+        title="[bold blue]Welcome!",
+        title_align="center",
+        padding=(1, 2),
+        border_style="bright_blue"
+    ), justify="center")
+    time.sleep(1)
+
+    while True:
+        master_password = Prompt.ask("\n[bold yellow]Enter your Master Password[/]", password=True)
+        pause_and_space()
+
+        if len(master_password) < 8:
+            console.print(Panel(
+                "[bold red]Master Password is too weak. It should be at least 8 characters long. :pensive:[/]",
+                title="[bold red]Weak Password",
+                title_align="center",
+                padding=(1, 2),
+                border_style="red"
+            ), justify="center")
+            pause_and_space()
+        else:
+            confirm_password = Prompt.ask("[bold yellow]Confirm your Master Password[/]", password=True)
+            pause_and_space()
+            if master_password == confirm_password:
+                console.print(Panel(
+                    "[bold green]Master Password created successfully! :tada:[/]",
+                    title="[bold green]Success!",
+                    title_align="center",
+                    padding=(1, 2),
+                    border_style="green"
+                ), justify="center")
+                pause_and_space()
+                hashed_password = hash_password(master_password)
+                with open(MASTER_PASSWORD_FILE, "w") as file:
+                    file.write(hashed_password)
+                break
+            else:
+                console.print(Panel(
+                    "[bold red]Passwords don't match. Please try again. :disappointed:[/]",
+                    title="[bold red]Mismatch",
+                    title_align="center",
+                    padding=(1, 2),
+                    border_style="red"
+                ), justify="center")
+                pause_and_space()
 
 def verify_master_password():
-	# This function verifies the master password and returns True or False
-	# We use this function to check if the user enters the correct master password
-	with open(MASTER_PASSWORD_FILE, "r") as file: # Open the master password file in read mode
-		hashed_password = file.read() # Read the hashed master password from the file
-	time.sleep(1)
-	master_password = input(Fore.YELLOW + "\n[?] Enter your Master Password: " + Style.RESET_ALL) # Ask the user to enter the master password
-	if hash_password(master_password) == hashed_password: # Check if the hashed master password matches the stored one
-		time.sleep(1)
-		print(Fore.GREEN + "\n[✓] Your Master Password is correct. 👍" + Style.RESET_ALL) # Tell the user that the master password is correct
-		time.sleep(1)
-		return True # Return True
-	else: # If the hashed master password does not match the stored one
-		time.sleep(1)
-		print(Fore.RED + "\n[!] Your Master Password is wrong. 😟" + Style.RESET_ALL) # Tell the user that the master password is wrong
-		time.sleep(1)
-		return False # Return False
+    # Verify master password
+    with open(MASTER_PASSWORD_FILE, "r") as file:
+        hashed_password = file.read()
+    master_password = Prompt.ask("[bold yellow]Enter your Master Password[/]", password=True)
+    pause_and_space()
+    if hash_password(master_password) == hashed_password:
+        console.print(Panel(
+            "[bold green]Master Password is correct. :thumbsup:[/]",
+            title="[bold green]Access Granted!",
+            title_align="center",
+            padding=(1, 2),
+            border_style="green"
+        ), justify="center")
+        pause_and_space()
+        return True
+    else:
+        console.print(Panel(
+            "[bold red]Master Password is wrong. :worried:[/]",
+            title="[bold red]Incorrect Password",
+            title_align="center",
+            padding=(1, 2),
+            border_style="red"
+        ), justify="center")
+        pause_and_space()
+        return False
 
 def add_password():
-	# This function adds a new password to the passwords dictionary and saves it to the passwords file
-	# We use this function to let the user store a new password for a new service
-	passwords = load_passwords() # Load the passwords dictionary
-	time.sleep(1)
-	service = input(Fore.YELLOW + "\n[?] Enter the name of the service: " + Style.RESET_ALL) # Ask the user to enter the name of the service
-	if service in passwords: # Check if the service already exists in the passwords dictionary
-		time.sleep(1)
-		print(Fore.RED + "\n[!] You already have a password for " + Back.RED + f"{service}" + Style.RESET_ALL + Fore.RED + ". 😮" + Style.RESET_ALL) # Tell the user that they already have a password for the service
-		time.sleep(1)
-		print(Fore.RED + "[!] Your password for", Back.RED + f"{service}" + Style.RESET_ALL, Fore.RED + "is" + Style.RESET_ALL, Back.RED + f"{decrypt_password(passwords[service])}" + Style.RESET_ALL, "🔑") # Show the user their password for the service
-		time.sleep(1)
-		print(Fore.RED + "\n[!] If you want to change your password for this service, please delete it first and then add a new one. 🙏" + Style.RESET_ALL) # Tell the user how to change their password for the service
-		time.sleep(1)
-		choice = input(Fore.YELLOW + "\n[?] Done? (Press any key): " + Style.RESET_ALL)
-		time.sleep(1)
-		if choice.lower == "y":
-			return
-		else:
-			return
-	else: # If the service does not exist in the passwords dictionary
-		time.sleep(1)
-		choice = input(Fore.YELLOW + "\n[?] Do you want to create a random password for this service? (y/n): " + Style.RESET_ALL) # Ask the user if they want to create a random password for the service
-		time.sleep(1)
-		if choice.lower() == "y": # If the user wants to create a random password
-			length = int(input(Fore.YELLOW + "\n[?] Enter the length of the password (8-32): " + Style.RESET_ALL)) # Ask the user to enter the length of the password
-			if length < 8 or length > 32: # Check if the length is valid
-				time.sleep(1)
-				print(Fore.RED + "\n[!] The length of the password should be between 8 and 32. 😕" + Style.RESET_ALL) # Tell the user that the length is invalid
-				time.sleep(2)
-				return # Return from the function
-			password = generate_password(length) # Generate a random password of the given length
-			time.sleep(1)
-			print(Fore.GREEN + "\n[✓] Your random password for" + Style.RESET_ALL, Back.GREEN + f"{service}" + Style.RESET_ALL, Fore.GREEN + "is" + Style.RESET_ALL, Back.GREEN + f"{password}" + Style.RESET_ALL, "🎲") # Show the user their random password for the service
-			time.sleep(1)
-			choice = input(Fore.YELLOW + "\n[?] Done? (Press any key): " + Style.RESET_ALL)
-			time.sleep(1)
-			if choice.lower == "y":
-				pass
-			else:
-				pass
-		elif choice.lower() == "n": # If the user does not want to create a random password
-			time.sleep(1)
-			password = input(Fore.YELLOW + "\n[?] Enter your password for this service: " + Style.RESET_ALL) # Ask the user to enter their password for the service
-			time.sleep(1)
-		else: # If the user enters something else
-			print(Fore.RED + "\n[!] Invalid choice. Please enter y or n. 😕" + Style.RESET_ALL) # Tell the user that their choice is invalid
-			return # Return from the function
-		encrypted_password = encrypt_password(password) # Encrypt the password
-		passwords[service] = encrypted_password # Add the service and the encrypted password to the passwords dictionary
-		save_passwords(passwords) # Save the passwords dictionary to the passwords file
-		time.sleep(1)
-		print(Fore.GREEN + "\n[✓] Your password for" + Style.RESET_ALL, Back.GREEN + f"{service}" + Style.RESET_ALL, Fore.GREEN + "has been saved successfully! 🙌" + Style.RESET_ALL) # Congratulate the user
-		time.sleep(2)
+    # Add a new password 
+    passwords = load_passwords()
 
-def view_passwords():
-	# This function shows the user the list of services and passwords they have saved
-	# We use this function to let the user see their stored passwords
-	passwords = load_passwords() # Load the passwords dictionary
-	if passwords: # Check if the passwords dictionary is not empty
-		time.sleep(1)
-		print("\n[•] Here are your stored passwords: 📝\n") # Tell the user that they have stored passwords
-		time.sleep(1)
-		print("•" + "—" * 50 + "•") # Print a separator line
-		for service, encrypted_password in passwords.items(): # Loop through the passwords dictionary
-			password = decrypt_password(encrypted_password) # Decrypt the password
-			print(f"| {service}: {password}") # Print the service and the password
-		print("•" + "—" * 50 + "•") # Print a separator line
-		time.sleep(1)
-		choice = input(Fore.YELLOW + "\n[?] Done? (Press any key): " + Style.RESET_ALL)
-		time.sleep(1)
-		if choice.lower == "y":
-			return
-		else:
-			return
-	else: # If the passwords dictionary is empty
-		time.sleep(1)
-		print(Fore.RED + "\n[!] You have no stored passwords. 😢" + Style.RESET_ALL) # Tell the user that they have no stored passwords
-		time.sleep(2)
+    try:
+        service = Prompt.ask("[bold yellow]Enter the name of the service[/]")
+        pause_and_space()
+        if not service.strip():
+            raise ValueError("Service name cannot be blank.")
 
-def delete_passwords():
-	# This function deletes one or more passwords from the passwords dictionary and saves it to the passwords file
-	# We use this function to let the user delete their passwords for the services they no longer use
-	passwords = load_passwords() # Load the passwords dictionary
-	if passwords: # Check if the passwords dictionary is not empty
-		time.sleep(1)
-		print("\n[•] Here are your stored passwords: 📝\n") # Tell the user that they have stored passwords
-		print("•" + "—" * 50 + "•") # Print a separator line
-		for i, (service, encrypted_password) in enumerate(passwords.items(), 1): # Loop through the passwords dictionary with index
-			password = decrypt_password(encrypted_password) # Decrypt the password
-			print(f"| {i}. {service}: {password}") # Print the index, the service and the password
-		print("•" + "—" * 50 + "•") # Print a separator line
-		print("")
-		time.sleep(1)
-		choice = input(Fore.YELLOW + "[?] Enter the number(s) of the password(s) you want to delete (separated by comma): " + Style.RESET_ALL) # Ask the user to enter the number(s) of the password(s) they want to delete
-		numbers = choice.split(",") # Split the choice by comma
-		services = [] # Initialize an empty list of services
-		for number in numbers: # Loop through the numbers
-			try: # Try to
-				number = int(number) # Convert the number to integer
-				service = list(passwords.keys())[number - 1] # Get the service name by the index
-				services.append(service) # Add the service name to the list of services
-			except: # If there is an error
-				time.sleep(1)
-				print(Fore.RED + "\n[!]" + Style.RESET_ALL, Back.RED + f"{number}" + Style.RESET_ALL, Fore.RED + "is not a valid number. 😕" + Style.RESET_ALL) # Tell the user that the number is invalid
-				time.sleep(2)
-				return # Return from the function
-		time.sleep(1)
-		print(Fore.YELLOW + "\n[?] Are you sure you want to delete the password(s) for" + Style.RESET_ALL, Back.YELLOW + f"{', '.join(services)}" + Style.RESET_ALL, Fore.YELLOW + "?" + Style.RESET_ALL) # Ask the user to confirm their choice
-		time.sleep(1)
-		confirm = input(Fore.YELLOW + "[?] Yes or Not? (y/n): " + Style.RESET_ALL)
-		if confirm.lower() == "y": # If the user confirms
-			for service in services: # Loop through the services
-				passwords.pop(service) # Remove the service and the password from the passwords dictionary
-			save_passwords(passwords) # Save the passwords dictionary to the passwords file
-			time.sleep(1)
-			print(Fore.GREEN + "\n[✓] The password(s) for" + Style.RESET_ALL, Back.GREEN + f"{', '.join(services)}" + Style.RESET_ALL, Fore.GREEN + "have been deleted successfully! 🗑️" + Style.RESET_ALL) # Congratulate the user
-			time.sleep(2)
-		elif confirm.lower() == "n": # If the user cancels
-			time.sleep(1)
-			print(Fore.GREEN + "\n[✓] The deletion has been canceled. 😌" + Style.RESET_ALL) # Tell the user that the deletion has been canceled
-			time.sleep(2)
-		else: # If the user enters something else
-			time.sleep(1)
-			print(Fore.RED + "\n[!] Invalid choice. Please enter y or n. 😕" + Style.RESET_ALL) # Tell the user that their choice is invalid
-			time.sleep(2)
-	else: # If the passwords dictionary is empty
-		time.sleep(1)
-		print(Fore.RED + "\n[!] You have no stored passwords. 😢" + Style.RESET_ALL) # Tell the user that they have no stored passwords
-		time.sleep(2)
+        if service in passwords:
+            console.print(Panel(
+                f"[bold red]You already have a password for [bold underline red]{service}[/]. :open_mouth:[/]\n\n" 
+                f"[bold red]Your password for [bold underline red]{service}[/] is [bold underline red]{decrypt_data(passwords[service]).split('|')[0]}[/] :key:[/]\n\n"
+                "[bold red]Delete it first if you want to change it. :pray:[/]",
+                title="[bold red]Duplicate Entry",
+                title_align="center", 
+                padding=(1, 2),
+                border_style="red" 
+            ), justify="center") 
+            pause_and_space()
+        else:
+            create_random = Confirm.ask("[bold yellow]Create a random password?[/]")
+            pause_and_space()  
+            if create_random:
+                length = Prompt.ask("[bold yellow]Enter the length of the password (8-32)[/]", console=console)
+                pause_and_space() 
+                try:  
+                    length = int(length)
+                    if 8 <= length <= 32: 
+                        password = generate_password(length)
+                        console.print(Panel(
+                            f"[bold green]Your random password for [bold underline green]{service}[/] is [bold underline green]{password}[/] :game_die:[/]", 
+                            title="[bold green]Password Generated!",
+                            title_align="center", 
+                            padding=(1, 2),
+                            border_style="green" 
+                        ), justify="center")  
+                        pause_and_space()
+                        # Encrypt the timestamp along with the password
+                        timestamp_str = time.strftime("%H:%M:%S %Y-%m-%d")
+                        combined_data = password + "|" + timestamp_str  
+                        encrypted_data = encrypt_data(combined_data)  
+
+                        passwords[service] = encrypted_data
+                        save_passwords(passwords)
+                    else:
+                        console.print(Panel(
+                            "[bold red]Password length should be between 8 and 32. :pensive:[/]",
+                            title="[bold red]Invalid Length", 
+                            title_align="center", 
+                            padding=(1, 2),
+                            border_style="red"
+                        ), justify="center") 
+                        pause_and_space()
+                        return 
+                except ValueError:
+                    console.print(Panel(
+                        "[bold red]Invalid input for password length. Please enter a number between 8 and 32. :pensive:[/]", 
+                        title="[bold red]Invalid Input", 
+                        title_align="center", 
+                        padding=(1, 2),
+                        border_style="red"
+                    ), justify="center")
+                    pause_and_space()
+                    return 
+            else: 
+                try:  
+                    password = Prompt.ask("[bold yellow]Enter your password for this service[/]", password=True)
+                    pause_and_space()  
+                    if not password.strip():
+                        raise ValueError("Password cannot be blank.")
+
+                    # Combine password and timestamp before encryption
+                    timestamp_str = time.strftime("%H:%M:%S %Y-%m-%d")
+                    combined_data = password + "|" + timestamp_str 
+                    encrypted_data = encrypt_data(combined_data)
+
+                    passwords[service] = encrypted_data  # Store combined data
+                    save_passwords(passwords)
+                    console.print(Panel(
+                        f"[bold green]Password for [bold underline green]{service}[/] saved successfully! :raised_hands:[/]",
+                        title="[bold green]Password Saved!",
+                        title_align="center", 
+                        padding=(1, 2),
+                        border_style="green" 
+                    ), justify="center") 
+                    pause_and_space() 
+                except ValueError as e:
+                    console.print(Panel(
+                        f"[bold red]{e}[/]",
+                        title="[bold red]Invalid Input",
+                        title_align="center",
+                        padding=(1, 2),
+                        border_style="red"
+                    ), justify="center")
+                    pause_and_space()
+    except ValueError as e:
+        console.print(Panel(
+            f"[bold red]{e}[/]",
+            title="[bold red]Invalid Input",
+            title_align="center",
+            padding=(1, 2),
+            border_style="red"
+        ), justify="center")
+        pause_and_space()
+
+def view_passwords(): 
+    # View stored passwords 
+    passwords = load_passwords()
+    if passwords:
+        table = Table(title="Your Stored Passwords :memo:", title_style="bold magenta")
+        table.add_column("No.", style="cyan", justify="center") 
+        table.add_column("Service", style="cyan", justify="center") 
+        table.add_column("Password", style="magenta", justify="center") 
+        table.add_column("Added On", style="green", justify="center")  
+        for i, (service, encrypted_data) in enumerate(passwords.items(), 1):
+            decrypted_data = decrypt_data(encrypted_data)
+            if decrypted_data:
+                password, timestamp = decrypted_data.split("|")  # Split data
+                table.add_row(str(i), service, password, timestamp)
+        console.print(table, justify="center") 
+        pause_and_space()
+    else:
+        console.print(Panel(
+            "[bold red]You have no stored passwords. :crying_face:[/]",
+            title="[bold red]No Passwords Found",
+            title_align="center", # Center title
+            padding=(1, 2),
+            border_style="red" 
+        ), justify="center") 
+        pause_and_space()
+
+def delete_passwords(): 
+    # Delete passwords 
+    passwords = load_passwords()
+    if passwords:
+        table = Table(title="Your Stored Passwords :memo:", title_style="bold magenta")
+        table.add_column("No.", style="cyan", justify="center") 
+        table.add_column("Service", style="cyan", justify="center") 
+        table.add_column("Password", style="magenta", justify="center") 
+        table.add_column("Added On", style="green", justify="center")  # Add timestamp column
+        for i, (service, encrypted_data) in enumerate(passwords.items(), 1):
+            decrypted_data = decrypt_data(encrypted_data) 
+            if decrypted_data:
+                password, timestamp = decrypted_data.split("|") 
+                table.add_row(str(i), service, password, timestamp)
+        console.print(table, justify="center") 
+        pause_and_space()
+
+        choice = Prompt.ask("[bold yellow]Enter the number(s) of the password(s) to delete (comma-separated)[/]")
+        pause_and_space() 
+        numbers = choice.split(",")
+        services = []
+        for number in numbers:
+            try:
+                number = int(number)
+                service = list(passwords.keys())[number - 1]
+                services.append(service)
+            except:
+                console.print(Panel(
+                    f"[bold underline red]{number}[/] [bold red]is not a valid number.[/] :pensive:",  # Change to red
+                    title="[bold red]Invalid Input",  # Change to red
+                    title_align="center", 
+                    padding=(1, 2),
+                    border_style="red" 
+                ), justify="center") 
+                pause_and_space()
+                return 
+
+        confirm = Confirm.ask(f"[bold yellow]Delete password(s) for [bold yellow]{', '.join([f'[bold underline yellow]{service}[/]' for service in services])}[/]?[/]")
+        pause_and_space() 
+        if confirm:
+            for service in services:
+                passwords.pop(service) 
+            save_passwords(passwords)
+            console.print(Panel(
+                f"[bold green]Password(s) for [bold green]{', '.join([f'[bold underline green]{service}[/]' for service in services])}[/] deleted successfully! :wastebasket:[/]",
+                title="[bold green]Passwords Deleted",
+                title_align="center", 
+                padding=(1, 2),
+                border_style="green" 
+            ), justify="center") 
+            pause_and_space()
+        else:
+            console.print(Panel(
+                "[bold green]Deletion canceled. :relieved:[/]",
+                title="[bold green]Deletion Canceled", 
+                title_align="center", 
+                padding=(1, 2),
+                border_style="green" 
+            ), justify="center") 
+            pause_and_space()
+    else:
+        console.print(Panel(
+            "[bold red]You have no stored passwords. :crying_face:[/]",
+            title="[bold red]No Passwords Found",
+            title_align="center", 
+            padding=(1, 2),
+            border_style="red" 
+        ), justify="center") 
+        pause_and_space() 
 
 def main():
-	# This function is the main entry point of the script
-	# We use this function to run the script and handle the user's choices
-	if not os.path.exists(MASTER_PASSWORD_FILE): # Check if the master password file does not exist
-		create_master_password() # Create the master password
-		key = generate_key() # Generate the encryption key
-		with open(KEY_FILE, "wb") as file: # Open the key file in binary mode
-			file.write(key) # Write the key to the file
-		passwords = {} # Initialize an empty passwords dictionary
-		save_passwords(passwords) # Save the passwords dictionary to the passwords file
-	while True: # Loop until the user exits the script
-		clear_and_sleep()
-		print("[•] Welcome to the Smart Password Manager! 🙌") # Greet the user
-		print("[•] What do you want to do?\n") # Ask the user what they want to do
-		print("1. Add a new password") # Print the first option
-		print("2. View your stored passwords") # Print the second option
-		print("3. Delete a password") # Print the third option
-		print("4. Exit the script") # Print the fourth option
-		time.sleep(1)
-		choice = input(Fore.YELLOW + "\n[?] Enter your choice (1-4): " + Style.RESET_ALL) # Ask the user to enter their choice
-		if choice == "1": # If the user chooses the first option
-			if verify_master_password(): # Verify the master password
-				add_password() # Add a new password
-		elif choice == "2": # If the user chooses the second option
-			if verify_master_password(): # Verify the master password
-				view_passwords() # View the stored passwords
-		elif choice == "3": # If the user chooses the third option
-			if verify_master_password(): # Verify the master password
-				delete_passwords() # Delete a password
-		elif choice == "4": # If the user chooses the fourth option
-			time.sleep(1)
-			print("\n[•] Thank you for using the Smart Password Manager! 😊") # Thank the user
-			time.sleep(2)
-			print("[•] Have a nice day! 👋") # Wish the user a nice day
-			time.sleep(1)
-			break # Break the loop
-		else: # If the user enters something else
-			time.sleep(1)
-			print(Fore.RED + "\n[!] Invalid choice. Please enter 1, 2, 3, or 4. 😕" + Style.RESET_ALL) # Tell the user that their choice is invalid
-			time.sleep(2)
+    # Main function
+    os.system('clear')
+    time.sleep(1)
+    if not os.path.exists(MASTER_PASSWORD_FILE):
+        create_master_password()
+        key = generate_key()
+        with open(KEY_FILE, "wb") as file:
+            file.write(key)
+        passwords = {}
+        save_passwords(passwords)
 
-# Run the main function
+    while True:
+        console.print(Panel(
+            "[bold green]Welcome to the Smart Password Manager! :smiley:[/]\n\n" 
+            "[bold]What do you want to do?[/]", 
+            title="[bold blue]Main Menu",
+            title_align="center", 
+            padding=(1, 2),
+            border_style="bright_blue"
+        ), justify="center") 
+        pause_and_space()
+
+        console.print("[1] Add a new password") 
+        console.print("[2] View your stored passwords") 
+        console.print("[3] Delete a password") 
+        console.print("[4] Exit") 
+        pause_and_space()
+
+        choice = Prompt.ask("\n[bold yellow]Enter your choice (1-4)[/]", choices=["1", "2", "3", "4"]) 
+        pause_and_space() 
+        if choice == "1":
+            if verify_master_password():
+                add_password()
+        elif choice == "2":
+            if verify_master_password():
+                view_passwords()
+        elif choice == "3":
+            if verify_master_password():
+                delete_passwords()
+        elif choice == "4":
+            console.print(Panel(
+                "[bold]Thank you for using the Smart Password Manager! :smiley:[/]\n\n" 
+                "[bold]Have a nice day! :wave:[/]", 
+                title="[bold magenta]Goodbye!", 
+                title_align="center", 
+                padding=(1, 2),
+                border_style="magenta"
+            ), justify="center") 
+            pause_and_space() 
+            break 
+        console.input("[bold blue]Press Enter to continue...[/]")  
+        os.system('clear')  
+        pause_and_space()
+
+# Run the main function 
 if __name__ == "__main__":
-	main()
+    main()
+
