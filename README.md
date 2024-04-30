@@ -30,7 +30,12 @@ Smart Password Manager is a secure and user-friendly Python script that allows y
 
 ## Installation
 
-1. Clone the repository or download the source code.
+1. Clone the repository or download the source code:
+
+```
+git clone https://github.com/TheRebo/Password-Manager.git
+```
+
 2. Install the required dependencies by running:
 
 ```
