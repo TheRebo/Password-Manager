@@ -34,7 +34,13 @@ Smart Password Manager itu skrip Python yang amannya kebangetan buat nyimpen, ng
 git clone --branch Bahasa-Indonesia --single-branch https://github.com/TheRebo/Password-Manager.git
 ```
 
-2. Instal dependensi yang dibutuhkan dengan menjalankan:
+2. Masuk ke direktori-nya:
+
+```
+cd Password-Manager
+```
+
+3. Instal dependensi yang dibutuhkan dengan menjalankan:
 
 ```
 pip install -r requirements.txt
