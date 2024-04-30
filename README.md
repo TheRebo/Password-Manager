@@ -36,7 +36,13 @@ Smart Password Manager is a secure and user-friendly Python script that allows y
 git clone https://github.com/TheRebo/Password-Manager.git
 ```
 
-2. Install the required dependencies by running:
+2. Go to the directory:
+
+```
+cd Password-Manager
+```
+
+3. Install the required dependencies by running:
 
 ```
 pip install -r requirements.txt
@@ -82,7 +88,7 @@ python pass-man.py
 ## Changelog
 
 ```markdown
-## [Unreleased]
+## [W.I.P] (Work In Progress)
 - Trying to strengthen its encryption method.
 - Detect any changes in the program code (so that the Master Password function cannot be deleted).
 - The database files can only be deleted through this program.
