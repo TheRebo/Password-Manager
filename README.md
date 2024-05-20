@@ -1,97 +1,103 @@
-# Smart Password Manager
+# 🛡️ Smart Password Manager
+
+## 🚀 Program Description
 
 [![License](https://img.shields.io/badge/License-AGPLv3-blue.svg)](https://www.gnu.org/licenses/agpl-3.0)
 
-Smart Password Manager is a secure and user-friendly Python script that allows you to store, view, and manage your passwords for different services. With encryption and a master password, your data remains safe while being easily accessible.
+**Smart Password Manager** is a sophisticated Python script designed to securely store, view, and manage your passwords for various services. This tool ensures that your sensitive information is well-protected using advanced encryption methods.
 
 > **Note:** For Indonesian users, please check the Branch, because there are Indonesian translations available.
+
+---
 
 ## Table of Contents
 
 - [Features](#features)
+- [Highlighted Features](#highlighted-features)
 - [Installation](#installation)
 - [Usage](#usage)
 - [Things to Know](#things-to-know)
-- [Things Not to Do](#things-not-to-do)
-- [Potential Bugs](#potential-bugs)
+- [Don'ts](#don'ts)
 - [Changelog](#changelog)
-- [Disclaimer](#disclaimer)
 - [License](#license)
+- [Disclaimer](#disclaimer)
 
-## Features
+---
 
-- **Secure Password Storage:** Passwords are encrypted using the industry-standard Fernet encryption algorithm from the `cryptography` library, ensuring maximum security.
-- **Master Password Protection:** All your passwords are protected by a single, strong master password that you create during the initial setup.
-- **Random Password Generation:** The program can generate strong, random passwords for you with a customizable length.
-- **Password Viewing:** View all your stored passwords in a neat table format.
-- **Password Deletion:** Delete passwords for services you no longer use.
-- **Rich User Interface:** The program uses the `rich` library to provide a visually appealing and easy-to-use interface with colors, panels, and formatting.
-- **Timestamp Tracking:** Each password entry is timestamped, so you know when it was added.
+## ✨ Features
 
-## Installation
+- 🔒 **Secure Storage**: Store your passwords with 256-bit AES encryption.
+- 🗂️ **Easy Management**: View and delete passwords effortlessly.
+- 🔑 **Master Password Protection**: Secure your data with a strong master password.
+- 🎲 **Random Password Generation**: Create strong passwords using the built-in generator.
+- ⏰ **Timestamp Tracking:** Each password entry is timestamped, so you know when it was added.
+- 💻 **Rich UI**: Interactive command-line interface using `rich`.
 
-1. Clone the repository or download the source code:
+---
 
-```
-git clone https://github.com/TheRebo/Password-Manager.git
-```
+## 🌟 Highlighted Features
 
-2. Go to the directory:
+- 🔐 **Advanced Encryption**: Uses SHA-512 and PBKDF2HMAC for hashing and key derivation.
+- 🖥️ **User-Friendly Interface**: Leverages `rich` for a visually appealing CLI experience.
+- 🖥️ **Cross-Platform Compatibility**: Works seamlessly on Windows, macOS, and Linux.
 
-```
-cd Password-Manager
-```
+---
 
-3. Install the required dependencies by running:
+## 🛠️ Installation
 
-```
-pip install -r requirements.txt
-```
+1. Clone the repository:
+    ```bash
+    git clone https://github.com/TheRebo/Password-Manager.git
+    cd Password-Manager
+    ```
+2. Install the required dependencies:
+    ```bash
+    pip install -r requirements.txt
+    ```
 
-## Usage
+---
 
-1. Run the script with Python:
+## 📖 Usage
 
-```
-python pass-man.py
-```
+1. Run the script:
+    ```bash
+    python pass-man.py
+    ```
+2. Follow the on-screen prompts to create a master password and manage your passwords.
 
-2. On the first run, you will be prompted to create a strong master password. This password is used to encrypt and decrypt your stored passwords, so make sure to remember it.
+---
 
-3. After creating the master password, you can choose from the following options:
-   - Add a new password
-   - View your stored passwords
-   - Delete a password
-   - Exit
+## 📚 Things to Know
 
-4. Follow the on-screen instructions to perform the desired action.
+- 🔑 Your master password is the key to all your stored passwords. **There is no way to recover it if you forget it.**
+- 🔒 Passwords are stored in an encrypted format in the `passwords.dat` file.
+- 🔒 The master password hash and encryption key are stored in `master_password.dat` and `key.dat` files, respectively.
+- 🧂 The salt are stored in `salt.dat`.
 
-## Things to Know
+---
 
-- Your master password is the key to all your stored passwords. **There is no way to recover it if you forget it.**
-- Passwords are stored in an encrypted format in the `passwords.dat` file.
-- The master password hash and encryption key are stored in `master_password.dat` and `key.dat` files, respectively.
-- Each time you add a password, the password and the timestamp of addition are combined and encrypted before being stored.
+## 🚫 Don'ts
 
-## Things Not to Do
+- 🚷 **Do Not Forget Your Master Password**: There's no way to recover it if you forget it!
+- 🛡️ **Do Not Share Your Master Password**: Keep your master password confidential to ensure security.
 
-- **Do not** share your master password with anyone.
-- **Do not** modify or delete the `passwords.dat`, `master_password.dat`, or `key.dat` files manually.
-- **Do not** run the script with administrative privileges unless necessary.
+---
 
-## Potential Bugs
-
-- If the encryption key (`key.dat`) is lost or corrupted, you will not be able to decrypt your stored passwords.
-- If the `master_password.dat` file is corrupted, you may not be able to verify your master password.
-- If the `passwords.dat` file is corrupted, your stored passwords may become inaccessible.
-
-## Changelog
+## 📌 Changelog
 
 ```markdown
 ## [W.I.P] (Work In Progress)
-- Trying to strengthen its encryption method.
 - Detect any changes in the program code (so that the Master Password function cannot be deleted).
-- The database files can only be deleted through this program.
+- The database files can only be deleted through this program (somewhat impossible).
+- Migrate the database from ".dat" file to "SQLite" database.
+
+## [2.5.0] - 2024-05-20
+
+- Strengthening the security and sophistication of its encryption and decryption mechanisms.
+- Increasing the security of its "Master Password" mechanism.
+- Added "Change Master Password" feature.
+- Added "Data Reset" feature.
+- And other minor changes.
 
 ## [2.0.0] - 2024-04-30
 
@@ -113,11 +119,24 @@ python pass-man.py
 
 - Initial Released :)
 ```
-## Disclaimer
+---
 
-This program was created with the assistance of an AI language model. The author takes full responsibility for its content and functionality.
-**Use this program at your own risk**. The author is not responsible for any loss or damage caused by the use of this program.
+## 📜 License
 
-## License
+**Smart Password Manager** is licensed under the GNU Affero General Public License v3.0. You are free to use, modify, and distribute this software under the terms of the AGPL-3.0 license. For more details, see [LICENSE](https://www.gnu.org/licenses/agpl-3.0.html).
 
-This program is licensed under the GNU Affero General Public License v3.0.
+---
+
+## ⚠️ Disclaimer
+
+This project was aided by AI and human collaboration. While every effort has been made to ensure its security and functionality, use it at your own risk.
+
+---
+
+## ❤️ Made By
+
+Developed by Na'im Annafi Santosa ([TheRebo](https://github.com/TheRebo)).
+
+---
+
+Thank you for using **Smart Password Manager**! Your feedback and contributions are welcome.
