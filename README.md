@@ -33,7 +33,7 @@
 
 1. Kloning repositori:
     ```bash
-    git clone https://github.com/TheRebo/Password-Manager.git
+    git clone --branch Bahasa-Indonesia --single-branch https://github.com/TheRebo/Password-Manager.git
     cd Password-Manager
     ```
 2. Instal dependensi yang dibutuhkan:
