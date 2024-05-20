@@ -1,99 +1,107 @@
-# Smart Password Manager
+# 🛡️ Smart Password Manager
 
-[![Lisensi](https://img.shields.io/badge/License-AGPLv3-blue.svg)](https://www.gnu.org/licenses/agpl-3.0)
+## 🚀 Deskripsi Program
 
-Smart Password Manager itu skrip Python yang amannya kebangetan buat nyimpen, ngeliat, sama ngatur password-passwordmu buat berbagai layanan. Pake enkripsi sama master password, datamu tetep aman tapi gampang diakses juga.
+[![License](https://img.shields.io/badge/License-AGPLv3-blue.svg)](https://www.gnu.org/licenses/agpl-3.0)
+
+**Smart Password Manager** adalah skrip Python yang canggih yang dirancang untuk menyimpan, menampilkan, dan mengelola password kamu untuk berbagai layanan dengan aman. Alat ini memastikan informasi sensitif kamu terlindungi dengan metode enkripsi canggih.
+
+> **Catatan:** Buat pengguna di Indonesia, cek Cabang karena ada terjemahan dalam Bahasa Indonesia tersedia.
+
+---
 
 ## Daftar Isi
 
 - [Fitur](#fitur)
+- [Fitur Unggulan](#fitur-unggulan)
 - [Instalasi](#instalasi)
-- [Cara Pake](#cara-pake)
-- [Yang Perlu Diingat](#yang-perlu-diingat)
-- [Yang Jangan Diperbuat](#yang-jangan-diperbuat)
-- [Kemungkinan Bug](#kemungkinan-bug)
-- [Catatan Perubahan](#catatan-perubahan)
-- [Disclaimer](#disclaimer)
+- [Penggunaan](#penggunaan)
+- [Hal-hal yang Perlu Diketahui](#hal-hal-yang-perlu-diketahui)
+- [Jangan Lakukan](#jangan-lakukan)
+- [Changelog](#changelog)
 - [Lisensi](#lisensi)
+- [Disclaimer](#disclaimer)
 
-## Fitur
+---
 
-- **Penyimpanan Password Kebabekan:** Password dienkripsi pake algoritma enkripsi Fernet standar industri dari library `cryptography`, biar amannya maksimal gitu loh.
-- **Perlindungan Master Password:** Semua passwordmu dilindungi satu master password kuat yang kamu bikin pas setup awal. Kece kan?
-- **Pembuatan Password Acak:** Programnya bisa generate password acak yang kuat banget buat kamu dengan panjang yang bisa diatur sendiri.
-- **Ngeliat Password:** Lihat semua password yang tersimpan dalam format tabel yang rapi, enak diliat gitu loh.
-- **Penghapusan Password:** Hapus password buat layanan yang udah nggak kamu pake lagi, bersihin aja lah.
-- **Antarmuka Pengguna Kece:** Programnya pake library `rich` buat ngasih antarmuka yang kece badai dan gampang digunakan dengan warna, panel, sama pemformatan yang keren.
-- **Pelacakan Penanda Waktu:** Setiap entri password ditandai dengan waktu, jadi kamu tahu kapan itu ditambahkan. Guna banget kan?
+## ✨ Fitur
 
-## Instalasi
+- 🔒 **Penyimpanan Aman**: Simpan password kamu dengan enkripsi AES 256-bit.
+- 🗂️ **Pengelolaan Mudah**: Lihat dan hapus password dengan gampang.
+- 🔑 **Perlindungan Master Password**: Amankan data kamu dengan master password yang kuat.
+- 🎲 **Pembuat Password Acak**: Buat password kuat menggunakan pembuat bawaan.
+- ⏰ **Pelacakan Waktu Entri:** Setiap entri password ditandai waktunya, jadi kamu tahu kapan ditambahkan.
+- 💻 **Antarmuka Kaya**: Antarmuka baris perintah interaktif menggunakan `rich`.
 
-1. Clone repositorinya atau download kode sumbernya aja deh:
+---
 
-```
-git clone --branch Bahasa-Indonesia --single-branch https://github.com/TheRebo/Password-Manager.git
-```
+## 🌟 Fitur Unggulan
 
-2. Masuk ke direktori-nya:
+- 🔐 **Enkripsi Canggih**: Menggunakan SHA-512 dan PBKDF2HMAC untuk hashing dan derivasi kunci.
+- 🖥️ **Antarmuka Ramah Pengguna**: Memanfaatkan `rich` untuk pengalaman CLI yang menarik secara visual.
+- 🖥️ **Kompatibilitas Lintas Platform**: Berjalan lancar di Windows, macOS, dan Linux.
 
-```
-cd Password-Manager
-```
+---
 
-3. Instal dependensi yang dibutuhkan dengan menjalankan:
+## 🛠️ Instalasi
 
-```
-pip install -r requirements.txt
-```
+1. Kloning repositori:
+    ```bash
+    git clone https://github.com/TheRebo/Password-Manager.git
+    cd Password-Manager
+    ```
+2. Instal dependensi yang dibutuhkan:
+    ```bash
+    pip install -r requirements.txt
+    ```
 
-## Cara Pake
+---
 
-1. Jalankan skripnya pake Python:
+## 📖 Penggunaan
 
-```
-python pass-man-ind.py
-```
+1. Jalankan skrip:
+    ```bash
+    python pass-man.py
+    ```
+2. Ikuti petunjuk di layar untuk membuat master password dan mengelola password kamu.
 
-2. Pas dijalankan pertama kali, kamu bakal dimintain buat bikin master password yang kuat banget. Password ini digunakan buat ngenkripsi sama ndekripsi password yang tersimpan, jadi inget baik-baik ya passwordnya.
+---
 
-3. Setelah bikin master password, kamu bisa milih dari opsi-opsi keren berikut:
-   - Tambahin password baru
-   - Liat password yang udah tersimpan
-   - Hapus password
-   - Cabut dulu
+## 📚 Hal-hal yang Perlu Diketahui
 
-4. Ikutin aja instruksi di layar buat ngelakuin aksi yang kamu mau.
+- 🔑 Master password kamu adalah kunci untuk semua password yang disimpan. **Tidak ada cara untuk memulihkannya jika kamu lupa.**
+- 🔒 Password disimpan dalam format terenkripsi di file `passwords.dat`.
+- 🔒 Hash master password dan kunci enkripsi disimpan di file `master_password.dat` dan `key.dat`.
+- 🧂 Salt disimpan di `salt.dat`.
 
-## Yang Perlu Diingat
+---
 
-- Master passwordmu itu kunci buat semua password yang tersimpan. **Kalo kamu lupa, ya udah, nggak ada cara buat memulihkannya.**
-- Password disimpan dalam format terenkripsi di file `passwords.dat`.
-- Hash master password sama kunci enkripsinya disimpan di file `master_password.dat` sama `key.dat`.
-- Setiap kali kamu nambahin password, password sama penanda waktu ditambahkan, digabungin, terus dienkripsi sebelum disimpan.
+## 🚫 Jangan Lakukan
 
-## Yang Jangan Diperbuat
+- 🚷 **Jangan Lupa Master Password Kamu**: Tidak ada cara untuk memulihkannya jika kamu lupa!
+- 🛡️ **Jangan Bagikan Master Password Kamu**: Jaga kerahasiaan master password kamu untuk memastikan keamanan.
 
-- **Jangan** bagi-bagi master passwordmu ke siapa pun ya, bahaya!
-- **Jangan** modifikasi atau hapus file `passwords.dat`, `master_password.dat`, atau `key.dat` secara manual, nanti rusak loh.
-- **Jangan** jalankan skripnya dengan hak akses admin kecuali kalo emang lagi butuh.
+---
 
-## Kemungkinan Bug
-
-- Kalo kunci enkripsi (`key.dat`) hilang atau rusak, kamu nggak bakal bisa ndekripsi password yang tersimpan, nyesel deh.
-- Kalo file `master_password.dat` rusak, kamu mungkin nggak bisa verifikasi master passwordmu, repot kan?
-- Kalo file `passwords.dat` rusak, password yang tersimpan bisa jadi nggak bisa diakses, sedihnya.
-
-## Catatan Perubahan
+## 📌 Changelog
 
 ```markdown
 ## [W.I.P] (Work In Progress)
-- Mencoba memperkuat metode enkripsinya.
-- Mendeteksi perubahan apa pun dalam kode program (sehingga fungsi Kata Sandi Utama tidak dapat dihapus).
-- File data hanya akan dapat dihapus melalui program ini (untuk memperkecil kemungkinan data corrupt).
+- Deteksi perubahan kode program (agar fungsi Master Password tidak bisa dihapus).
+- File database cuma bisa dihapus lewat program ini (hampir mustahil).
+- Migrasi database dari file ".dat" ke database "SQLite".
+
+## [2.5.0] - 2024-05-20
+
+- Memperkuat keamanan dan kecanggihan mekanisme enkripsi dan dekripsinya.
+- Meningkatkan keamanan mekanisme "Master Password".
+- Menambahkan fitur "Ganti Master Password".
+- Menambahkan fitur "Reset Data".
+- Dan perubahan kecil lainnya.
 
 ## [2.0.0] - 2024-04-30
 
-- Sekarang Sepenuhnya Menggunakan Module "Rich".
+- Sekarang Menggunakan Modul "Rich" Sepenuhnya.
 
 ## [1.1.0] - 2023-12-05
 
@@ -101,22 +109,35 @@ python pass-man-ind.py
 
 ## [1.0.2] - 2023-11-30
 
-- Sedikit Perbaikan BUG dan Peningkatan.
+- Sedikit Perbaikan Bug dan Peningkatan.
 
 ## [1.0.1] - 2023-11-26
 
-- Sedikit Perbaikan BUG.
+- Sedikit Perbaikan Bug.
 
 ## [1.0.0] - 2023-11-18
 
-- Rilis Pertama :)
+- Rilis Perdana :)
 ```
 
-## Disclaimer
+---
 
-Program ini dibuat dengan bantuan model bahasa AI. Penulis bertanggung jawab sepenuhnya atas isi dan fungsionalitasnya.
-**Gunakan program ini dengan risikomu sendiri** ya, jangan salahkan penulis kalo ada apa-apa.
+## 📜 Lisensi
 
-## Lisensi
+**Smart Password Manager** dilisensikan di bawah GNU Affero General Public License v3.0. Kamu bebas menggunakan, memodifikasi, dan mendistribusikan perangkat lunak ini di bawah ketentuan lisensi AGPL-3.0. Untuk detail lebih lanjut, lihat [LICENSE](https://www.gnu.org/licenses/agpl-3.0.html).
 
-Program ini dilisensikan di bawah GNU Affero General Public License v3.0.
+---
+
+## ⚠️ Disclaimer
+
+Proyek ini dibantu oleh AI dan kolaborasi manusia. Meski setiap upaya telah dilakukan untuk memastikan keamanan dan fungsionalitasnya, gunakan dengan risiko sendiri.
+
+---
+
+## ❤️ Dibuat Oleh
+
+Dikembangkan oleh Na'im Annafi Santosa ([TheRebo](https://github.com/TheRebo)).
+
+---
+
+Terima kasih telah menggunakan **Smart Password Manager**! Masukan dan kontribusi kamu sangat diapresiasi.
