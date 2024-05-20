@@ -10,20 +10,6 @@
 
 ---
 
-## Table of Contents
-
-- [Features](#features)
-- [Highlighted Features](#highlighted-features)
-- [Installation](#installation)
-- [Usage](#usage)
-- [Things to Know](#things-to-know)
-- [Don'ts](#don'ts)
-- [Changelog](#changelog)
-- [License](#license)
-- [Disclaimer](#disclaimer)
-
----
-
 ## ✨ Features
 
 - 🔒 **Secure Storage**: Store your passwords with 256-bit AES encryption.
