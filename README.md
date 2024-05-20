@@ -6,8 +6,6 @@
 
 **Smart Password Manager** adalah skrip Python yang canggih yang dirancang untuk menyimpan, menampilkan, dan mengelola password kamu untuk berbagai layanan dengan aman. Alat ini memastikan informasi sensitif kamu terlindungi dengan metode enkripsi canggih.
 
-> **Catatan:** Buat pengguna di Indonesia, cek Cabang karena ada terjemahan dalam Bahasa Indonesia tersedia.
-
 ---
 
 ## ✨ Fitur
