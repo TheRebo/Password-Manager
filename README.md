@@ -45,7 +45,7 @@
 
 1. Jalankan skrip:
     ```bash
-    python pass-man.py
+    python pass-man-ind.py
     ```
 2. Ikuti petunjuk di layar untuk membuat master password dan mengelola password kamu.
 
