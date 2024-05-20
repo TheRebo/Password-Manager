@@ -10,20 +10,6 @@
 
 ---
 
-## Daftar Isi
-
-- [Fitur](#fitur)
-- [Fitur Unggulan](#fitur-unggulan)
-- [Instalasi](#instalasi)
-- [Penggunaan](#penggunaan)
-- [Hal-hal yang Perlu Diketahui](#hal-hal-yang-perlu-diketahui)
-- [Jangan Lakukan](#jangan-lakukan)
-- [Changelog](#changelog)
-- [Lisensi](#lisensi)
-- [Disclaimer](#disclaimer)
-
----
-
 ## ✨ Fitur
 
 - 🔒 **Penyimpanan Aman**: Simpan password kamu dengan enkripsi AES 256-bit.
