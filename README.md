@@ -6,13 +6,13 @@
 
 **Smart Password Manager** is a sophisticated Python script designed to securely store, view, and manage your passwords for various services. This tool ensures that your sensitive information is well-protected using advanced encryption methods.
 
-> **Note:** For Indonesian users, please check the Branch, because there are Indonesian translations available.
+> **Note:** For Indonesian users, please check the Branch, because there are Indonesian translations available. (**Translations for v3.0 will follow soon!**)
 
 ---
 
 ## ✨ Features
 
-- 🔒 **Secure Storage**: Store your passwords with 256-bit AES encryption.
+- 🔒 **Secure Storage**: Store your passwords with `256-bit AES` encryption.
 - 🗂️ **Easy Management**: View and delete passwords effortlessly.
 - 🔑 **Master Password Protection**: Secure your data with a strong master password.
 - 🎲 **Random Password Generation**: Create strong passwords using the built-in generator.
@@ -23,7 +23,7 @@
 
 ## 🌟 Highlighted Features
 
-- 🔐 **Advanced Encryption**: Uses SHA-512 and PBKDF2HMAC for hashing and key derivation.
+- 🔐 **Advanced Encryption**: Uses `Argon2id` for hashing and key derivation.
 - 🖥️ **User-Friendly Interface**: Leverages `rich` for a visually appealing CLI experience.
 - 🖥️ **Cross-Platform Compatibility**: Works seamlessly on Windows, macOS, and Linux.
 
@@ -66,6 +66,7 @@
 
 - 🚷 **Do Not Forget Your Master Password**: There's no way to recover it if you forget it!
 - 🛡️ **Do Not Share Your Master Password**: Keep your master password confidential to ensure security.
+- 🚫 **Do Not Delete or Edit the Files Mentioned Above Manually!**: If You don't want to corrupt Your data!.
 
 ---
 
@@ -73,36 +74,31 @@
 
 ```markdown
 ## [W.I.P] (Work In Progress)
-- Detect any changes in the program code (so that the Master Password function cannot be deleted).
-- The database files can only be deleted through this program (somewhat impossible).
-- Migrate the database from ".dat" file to "SQLite" database.
+Too many to list, just stay tuned!
 
-## [2.5.0] - 2024-05-20
+## [v3.0.0] - 2024-08-17
+From now on the changelog will be included along with the program file.
 
+## [v2.5.0] - 2024-05-20
 - Strengthening the security and sophistication of its encryption and decryption mechanisms.
 - Increasing the security of its "Master Password" mechanism.
 - Added "Change Master Password" feature.
 - Added "Data Reset" feature.
 - And other minor changes.
 
-## [2.0.0] - 2024-04-30
-
+## [v2.0.0] - 2024-04-30
 - Now Fully Using the "Rich" Module.
 
-## [1.1.0] - 2023-12-05
-
+## [v1.1.0] - 2023-12-05
 - Added Color (Colorama).
 
-## [1.0.2] - 2023-11-30
-
+## [v1.0.2] - 2023-11-30
 - A Little Bugfix and Improvement.
 
-## [1.0.1] - 2023-11-26
-
+## [v1.0.1] - 2023-11-26
 - A Little Bugfix.
 
-## [1.0.0] - 2023-11-18
-
+## [v1.0.0] - 2023-11-18
 - Initial Released :)
 ```
 ---
