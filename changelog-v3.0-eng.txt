@@ -1,0 +1,19 @@
+1. Completely swapped out the algorithms used for "Hashing" and "KDF" (Key Derive Function).
+   We used to use the "PBKDF2HMAC" algorithm for both functions, but now we've switched entirely to the "Argon2id" algorithm for both.
+
+2. Totally changed the algorithms used for "Encryption" and "Decryption".
+   We used to use the "Fernet" algorithm for both functions, but now we've switched completely to the "AES-GCM" algorithm for both.
+
+3. "Duplicate Entry" Error Message:
+   - Fixed this error message, which was still using the "Split" method (oops, my bad!). Now it's using the "JSON" method like everything else;
+   - It's now "Case INsensitive";
+   - This error message will now grab the password name from the database to display, not the one input by the User.
+   
+4. Implemented a "Secure Delete" method in the "Reset Data" function.
+   How this "Secure Delete" works is by "Overwriting" the file to be deleted 3 times (you can change this if you want, more info in "IMPORTANT.txt"), and only then the file gets deleted.
+   The goal is to make sure the deleted file can't be retrieved by any means or methods (fingers crossed).
+   
+5. Added a warning message every time you input the Master Password, basically saying "Verification might take longer due to security improvements".
+   This is because the parameters we're using are pretty much maxed out (more details in the "IMPORTANT.txt" file).
+   
+6. And a bunch of other small changes (come on, you don't expect me to list every single one, do you? -_-).

@@ -1,0 +1,8 @@
+1. You can change how many times the files get "Overwritten" in this line "for _ in range(3):" in the "secure_delete_file" function. The "3" in that line is the number of times the files get "Overwritten".
+
+2. The parameters used in the "Hashing" and "KDF" functions are maxed out (for the average user), so if you feel it's too "heavy", you can tone it down yourself (please don't just change stuff randomly, at least do some research first). Or if you think it's too "light" (tch), you can crank it up yourself.
+
+3. There's actually a "Bug" in the table that shows up in the "View Passwords" and "Delete Password" functions.
+   When the characters from "Service" or "Password" are too long to fit in one line, the table will automatically cut off the characters that don't fit (marked with "..." at the end of the line).
+   I'm not gonna fix this Bug (for now), 'cause there are a few things to think about (just trust me on this one).
+   So if you run into this "Bug", just "Zoom Out" a bit first, then try again.

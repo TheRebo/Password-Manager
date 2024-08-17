@@ -1,0 +1,6 @@
+Sorry I haven't Updated in ages, it's been at least 3 months since my last update (actually a bit less than that, but I just didn't push it to Github, hehe).
+
+There's actually a ton of stuff I wanted to add or change, both features and other things.
+But since this program is already pushing 1000 lines (with some help from the formatter, hehe), it's gonna be harder to implement new features or stuff in this program (also 'cause I'm a noob).
+
+But stay tuned for future updates anyway (who knows, maybe the next update will be next year lol).
