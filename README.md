@@ -23,7 +23,7 @@
 
 ## 🌟 Highlighted Features
 
-- 🔐 **Advanced Encryption**: Uses `Argon2id` for hashing and key derivation.
+- 🔐 **Advanced Encryption**: Uses `Argon2id` for hashing and key derivation, and `AES-GCM` for encryption and decryption.
 - 🖥️ **User-Friendly Interface**: Leverages `rich` for a visually appealing CLI experience.
 - 🖥️ **Cross-Platform Compatibility**: Works seamlessly on Windows, macOS, and Linux.
 
@@ -75,6 +75,9 @@
 ```markdown
 ## [W.I.P] (Work In Progress)
 Too many to list, just stay tuned!
+
+## [v3.1.0] - 2024-08-27
+In changelog file.
 
 ## [v3.0.0] - 2024-08-17
 From now on the changelog will be included along with the program file.
