@@ -15,7 +15,7 @@
 #    along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 # ——— Import Module ———
-import os, time, sys
+import os, time, sys, string, difflib
 import cryptography, argon2, base64
 import pickle, secrets, json
 import rich
@@ -27,6 +27,8 @@ from rich.table import Table
 from rich.panel import Panel
 from rich.prompt import Prompt, Confirm
 from rich import box
+
+from difflib import get_close_matches
 
 # ——— Constant Declaration ———
 PASSWORDS_FILE = "passwords.dat"
@@ -171,16 +173,45 @@ def secure_delete_file(filename):
         return
 
     file_size = os.path.getsize(filename)
-    
+
     with open(filename, "rb+") as f:
         for _ in range(3):
             f.seek(0)
             f.write(secrets.token_bytes(file_size))
             f.flush()
             os.fsync(f.fileno())
-    
+
     os.remove(filename)
-    
+
+
+def normalize_string(s):
+    return "".join(c.lower() for c in s if not c.isspace())
+
+
+def search_passwords(passwords, key, search_term):
+    """Search for passwords containing the search term with improved matching."""
+    results = {}
+    normalized_search = normalize_string(search_term)
+
+    for service, encrypted_data in passwords.items():
+        if normalized_search in normalize_string(service):
+            decrypted_data = decrypt_data(encrypted_data, key)
+            if decrypted_data:
+                results[service] = json.loads(decrypted_data.decode("utf-8"))
+
+    if not results:
+        normalized_services = {normalize_string(s): s for s in passwords.keys()}
+        close_matches = get_close_matches(
+            normalized_search, normalized_services.keys(), n=3, cutoff=0.6
+        )
+        for match in close_matches:
+            service = normalized_services[match]
+            decrypted_data = decrypt_data(passwords[service], key)
+            if decrypted_data:
+                results[service] = json.loads(decrypted_data.decode("utf-8"))
+
+    return results
+
 
 def pause_and_space():
     """Add pauses and spacing for better readability."""
@@ -321,7 +352,7 @@ def verify_master_password():
 
 
 def add_password(key):
-    """Add a new password to the encrypted store."""
+    """Add a new password or update an existing one in the encrypted store."""
     passwords = load_passwords(key)
 
     try:
@@ -330,78 +361,78 @@ def add_password(key):
         if not service.strip():
             raise ValueError("Service name cannot be blank.")
 
-        if service.lower() in [s.lower() for s in passwords]:
-            matching_service = next(
-                (s for s in passwords if s.lower() == service.lower()), None
-            )
+        existing_password = None
+        normalized_service = normalize_string(service)
+        matching_service = next(
+            (s for s in passwords if normalize_string(s) == normalized_service), None
+        )
+
+        if matching_service:
             decrypted_data = decrypt_data(passwords[matching_service], key)
             if decrypted_data:
                 data = json.loads(decrypted_data.decode("utf-8"))
-                password = data.get("password")
+                existing_password = data.get("password")
 
+        if existing_password:
+            console.print(
+                Panel(
+                    f"[bold yellow]A password for [bold underline yellow]{matching_service}[/] already exists. :open_mouth:[/]\n\n"
+                    f"[bold yellow]Your current password for [bold underline yellow]{matching_service}[/] is [bold underline yellow]{existing_password}[/] :key:[/]\n\n"
+                    "[bold yellow]Do you want to update this password?[/]",
+                    title="[bold yellow]Existing Entry",
+                    title_align="center",
+                    padding=(1, 2),
+                    border_style="yellow",
+                ),
+                justify="center",
+            )
+            pause_and_space()
+
+            update = Confirm.ask("[bold yellow]Update this password?[/]")
+            pause_and_space()
+
+            if not update:
                 console.print(
                     Panel(
-                        f"[bold red]You already have a password for [bold underline red]{matching_service}[/]. :open_mouth:[/]\n\n"
-                        f"[bold red]Your password for [bold underline red]{matching_service}[/] is [bold underline red]{password}[/] :key:[/]\n\n"
-                        "[bold red]Delete it first if you want to change it. :pray:[/]",
-                        title="[bold red]Duplicate Entry",
+                        "[bold green]Password update canceled. :relieved:[/]",
+                        title="[bold green]Update Canceled",
                         title_align="center",
                         padding=(1, 2),
-                        border_style="red",
+                        border_style="green",
                     ),
                     justify="center",
                 )
                 pause_and_space()
-        else:
-            create_random = Confirm.ask("[bold yellow]Create a random password?[/]")
-            pause_and_space()
-            if create_random:
-                length = Prompt.ask(
-                    "[bold yellow]Enter the length of the password (8-32)[/]",
-                    console=console,
-                )
-                pause_and_space()
-                try:
-                    length = int(length)
-                    if 8 <= length <= 32:
-                        password = generate_password(length)
-                        console.print(
-                            Panel(
-                                f"[bold green]Your random password for [bold underline green]{service}[/] is [bold underline green]{password}[/] :game_die:[/]",
-                                title="[bold green]Password Generated!",
-                                title_align="center",
-                                padding=(1, 2),
-                                border_style="green",
-                            ),
-                            justify="center",
-                        )
-                        pause_and_space()
-                        timestamp_str = time.strftime("%H:%M:%S %Y-%m-%d")
-                        combined_data = json.dumps(
-                            {"password": password, "timestamp": timestamp_str}
-                        )
-                        encrypted_data = encrypt_data(combined_data, key)
+                return
 
-                        passwords[service] = encrypted_data
-                        save_passwords(passwords, key)
-                    else:
-                        console.print(
-                            Panel(
-                                "[bold red]Password length should be between 8 and 32. :pensive:[/]",
-                                title="[bold red]Invalid Length",
-                                title_align="center",
-                                padding=(1, 2),
-                                border_style="red",
-                            ),
-                            justify="center",
-                        )
-                        pause_and_space()
-                        return
-                except ValueError:
+        create_random = Confirm.ask("[bold yellow]Create a random password?[/]")
+        pause_and_space()
+        if create_random:
+            length = Prompt.ask(
+                "[bold yellow]Enter the length of the password (8-32)[/]",
+                console=console,
+            )
+            pause_and_space()
+            try:
+                length = int(length)
+                if 8 <= length <= 32:
+                    password = generate_password(length)
                     console.print(
                         Panel(
-                            "[bold red]Invalid input for password length. Please enter a number between 8 and 32. :pensive:[/]",
-                            title="[bold red]Invalid Input",
+                            f"[bold green]Your random password for [bold underline green]{service}[/] is [bold underline green]{password}[/] :game_die:[/]",
+                            title="[bold green]Password Generated!",
+                            title_align="center",
+                            padding=(1, 2),
+                            border_style="green",
+                        ),
+                        justify="center",
+                    )
+                    pause_and_space()
+                else:
+                    console.print(
+                        Panel(
+                            "[bold red]Password length should be between 8 and 32. :pensive:[/]",
+                            title="[bold red]Invalid Length",
                             title_align="center",
                             padding=(1, 2),
                             border_style="red",
@@ -410,47 +441,46 @@ def add_password(key):
                     )
                     pause_and_space()
                     return
-            else:
-                try:
-                    password = Prompt.ask(
-                        "[bold yellow]Enter your password for this service[/]",
-                        password=True,
-                    )
-                    pause_and_space()
-                    if not password.strip():
-                        raise ValueError("Password cannot be blank.")
+            except ValueError:
+                console.print(
+                    Panel(
+                        "[bold red]Invalid input for password length. Please enter a number between 8 and 32. :pensive:[/]",
+                        title="[bold red]Invalid Input",
+                        title_align="center",
+                        padding=(1, 2),
+                        border_style="red",
+                    ),
+                    justify="center",
+                )
+                pause_and_space()
+                return
+        else:
+            password = Prompt.ask(
+                "[bold yellow]Enter your password for this service[/]",
+                password=True,
+            )
+            pause_and_space()
+            if not password.strip():
+                raise ValueError("Password cannot be blank.")
 
-                    timestamp_str = time.strftime("%H:%M:%S %Y-%m-%d")
-                    combined_data = json.dumps(
-                        {"password": password, "timestamp": timestamp_str}
-                    )
-                    encrypted_data = encrypt_data(combined_data, key)
+        timestamp_str = time.strftime("%H:%M:%S %Y-%m-%d")
+        combined_data = json.dumps({"password": password, "timestamp": timestamp_str})
+        encrypted_data = encrypt_data(combined_data, key)
 
-                    passwords[service] = encrypted_data
-                    save_passwords(passwords, key)
-                    console.print(
-                        Panel(
-                            f"[bold green]Password for [bold underline green]{service}[/] saved successfully! :raised_hands:[/]",
-                            title="[bold green]Password Saved!",
-                            title_align="center",
-                            padding=(1, 2),
-                            border_style="green",
-                        ),
-                        justify="center",
-                    )
-                    pause_and_space()
-                except ValueError as e:
-                    console.print(
-                        Panel(
-                            f"[bold red]{e}[/]",
-                            title="[bold red]Invalid Input",
-                            title_align="center",
-                            padding=(1, 2),
-                            border_style="red",
-                        ),
-                        justify="center",
-                    )
-                    pause_and_space()
+        passwords[service] = encrypted_data
+        save_passwords(passwords, key)
+        action = "updated" if existing_password else "saved"
+        console.print(
+            Panel(
+                f"[bold green]Password for [bold underline green]{service}[/] {action} successfully! :raised_hands:[/]",
+                title=f"[bold green]Password {action.capitalize()}!",
+                title_align="center",
+                padding=(1, 2),
+                border_style="green",
+            ),
+            justify="center",
+        )
+        pause_and_space()
     except ValueError as e:
         console.print(
             Panel(
@@ -469,27 +499,46 @@ def view_passwords(key):
     """View stored passwords in a formatted table."""
     passwords = load_passwords(key)
     if passwords:
-        table = Table(
-            title="Your Stored Passwords :memo:",
-            title_style="bold magenta",
-            box=box.HEAVY,
-            show_lines=True,
-            expand=True,
-            highlight=True,
+        search_term = Prompt.ask(
+            "[bold yellow]Enter a search term (or press Enter to view all)[/]"
         )
-        table.add_column("No.", style="cyan", justify="center")
-        table.add_column("Service", style="cyan", justify="center")
-        table.add_column("Password", style="magenta", justify="center")
-        table.add_column("Added On", style="green", justify="center")
-        for i, (service, encrypted_data) in enumerate(passwords.items(), 1):
-            decrypted_data = decrypt_data(encrypted_data, key)
-            if decrypted_data:
-                decrypted_string = decrypted_data.decode("utf-8")
-                data = json.loads(decrypted_string)
-                password = data.get("password")
-                timestamp = data.get("timestamp")
-                table.add_row(str(i), service, password, timestamp)
-        console.print(table, justify="center")
+        pause_and_space()
+
+        if search_term:
+            results = search_passwords(passwords, key, search_term)
+        else:
+            results = {
+                service: json.loads(decrypt_data(encrypted_data, key).decode("utf-8"))
+                for service, encrypted_data in passwords.items()
+            }
+
+        if results:
+            table = Table(
+                title="Your Stored Passwords :memo:",
+                title_style="bold magenta",
+                box=box.HEAVY,
+                show_lines=True,
+                expand=True,
+                highlight=True,
+            )
+            table.add_column("No.", style="cyan", justify="center")
+            table.add_column("Service", style="cyan", justify="center")
+            table.add_column("Password", style="magenta", justify="center")
+            table.add_column("Added On", style="green", justify="center")
+            for i, (service, data) in enumerate(results.items(), 1):
+                table.add_row(str(i), service, data["password"], data["timestamp"])
+            console.print(table, justify="center")
+        else:
+            console.print(
+                Panel(
+                    f"[bold red]No passwords found matching '{search_term}'. :mag:[/]",
+                    title="[bold red]No Results",
+                    title_align="center",
+                    padding=(1, 2),
+                    border_style="red",
+                ),
+                justify="center",
+            )
         pause_and_space()
     else:
         console.print(
@@ -509,81 +558,101 @@ def delete_passwords(key):
     """Delete selected passwords from the encrypted store."""
     passwords = load_passwords(key)
     if passwords:
-        table = Table(
-            title="Your Stored Passwords :memo:",
-            title_style="bold magenta",
-            box=box.HEAVY,
-            show_lines=True,
-            expand=True,
-            highlight=True,
+        search_term = Prompt.ask(
+            "[bold yellow]Enter a search term (or press Enter to view all)[/]"
         )
-        table.add_column("No.", style="cyan", justify="center")
-        table.add_column("Service", style="cyan", justify="center")
-        table.add_column("Password", style="magenta", justify="center")
-        table.add_column("Added On", style="green", justify="center")
-        for i, (service, encrypted_data) in enumerate(passwords.items(), 1):
-            decrypted_data = decrypt_data(encrypted_data, key)
-            if decrypted_data:
-                decrypted_string = decrypted_data.decode("utf-8")
-                data = json.loads(decrypted_string)
-                password = data.get("password")
-                timestamp = data.get("timestamp")
-                table.add_row(str(i), service, password, timestamp)
-        console.print(table, justify="center")
         pause_and_space()
 
-        choice = Prompt.ask(
-            "[bold yellow]Enter the number(s) of the password(s) to delete (comma-separated)[/]"
-        )
-        pause_and_space()
-        numbers = choice.split(",")
-        services = []
-        for number in numbers:
-            try:
-                number = int(number)
-                service = list(passwords.keys())[number - 1]
-                services.append(service)
-            except:
+        if search_term:
+            results = search_passwords(passwords, key, search_term)
+        else:
+            results = {
+                service: json.loads(decrypt_data(encrypted_data, key).decode("utf-8"))
+                for service, encrypted_data in passwords.items()
+            }
+
+        if results:
+            table = Table(
+                title="Your Stored Passwords :memo:",
+                title_style="bold magenta",
+                box=box.HEAVY,
+                show_lines=True,
+                expand=True,
+                highlight=True,
+            )
+            table.add_column("No.", style="cyan", justify="center")
+            table.add_column("Service", style="cyan", justify="center")
+            table.add_column("Password", style="magenta", justify="center")
+            table.add_column("Added On", style="green", justify="center")
+            for i, (service, data) in enumerate(results.items(), 1):
+                table.add_row(str(i), service, data["password"], data["timestamp"])
+            console.print(table, justify="center")
+            pause_and_space()
+
+            choice = Prompt.ask(
+                "[bold yellow]Enter the number(s) of the password(s) to delete (comma-separated)[/]"
+            )
+            pause_and_space()
+            numbers = choice.split(",")
+            services = []
+            for number in numbers:
+                try:
+                    number = int(number)
+                    service = list(results.keys())[number - 1]
+                    services.append(service)
+                except:
+                    console.print(
+                        Panel(
+                            f"[bold underline red]{number}[/] [bold red]is not a valid number.[/] :pensive:",
+                            title="[bold red]Invalid Input",
+                            title_align="center",
+                            padding=(1, 2),
+                            border_style="red",
+                        ),
+                        justify="center",
+                    )
+                    pause_and_space()
+                    return
+
+            confirm = Confirm.ask(
+                f"[bold yellow]Delete password(s) for [bold yellow]{', '.join([f'[bold underline yellow]{service}[/]' for service in services])}[/]?[/]"
+            )
+            pause_and_space()
+            if confirm:
+                for service in services:
+                    passwords.pop(service)
+                save_passwords(passwords, key)
                 console.print(
                     Panel(
-                        f"[bold underline red]{number}[/] [bold red]is not a valid number.[/] :pensive:",
-                        title="[bold red]Invalid Input",
+                        f"[bold green]Password(s) for [bold green]{', '.join([f'[bold underline green]{service}[/]' for service in services])}[/] deleted successfully! :wastebasket:[/]",
+                        title="[bold green]Passwords Deleted",
                         title_align="center",
                         padding=(1, 2),
-                        border_style="red",
+                        border_style="green",
                     ),
                     justify="center",
                 )
                 pause_and_space()
-                return
-
-        confirm = Confirm.ask(
-            f"[bold yellow]Delete password(s) for [bold yellow]{', '.join([f'[bold underline yellow]{service}[/]' for service in services])}[/]?[/]"
-        )
-        pause_and_space()
-        if confirm:
-            for service in services:
-                passwords.pop(service)
-            save_passwords(passwords, key)
-            console.print(
-                Panel(
-                    f"[bold green]Password(s) for [bold green]{', '.join([f'[bold underline green]{service}[/]' for service in services])}[/] deleted successfully! :wastebasket:[/]",
-                    title="[bold green]Passwords Deleted",
-                    title_align="center",
-                    padding=(1, 2),
-                    border_style="green",
-                ),
-                justify="center",
-            )
-            pause_and_space()
+            else:
+                console.print(
+                    Panel(
+                        "[bold green]Deletion canceled. :relieved:[/]",
+                        title="[bold green]Deletion Canceled",
+                        title_align="center",
+                        padding=(1, 2),
+                        border_style="green",
+                    ),
+                    justify="center",
+                )
+                pause_and_space()
         else:
             console.print(
                 Panel(
-                    "[bold green]Deletion canceled. :relieved:[/]",
-                    title="[bold green]Deletion Canceled",
+                    f"[bold red]No passwords found matching '{search_term}'. :mag:[/]",
+                    title="[bold red]No Results",
                     title_align="center",
                     padding=(1, 2),
-                    border_style="green",
+                    border_style="red",
                 ),
                 justify="center",
             )
