@@ -1,3 +1,5 @@
+Version 3.0:
+
 1. Completely swapped out the algorithms used for "Hashing" and "KDF" (Key Derive Function).
    We used to use the "PBKDF2HMAC" algorithm for both functions, but now we've switched entirely to the "Argon2id" algorithm for both.
 
@@ -10,10 +12,23 @@
    - This error message will now grab the password name from the database to display, not the one input by the User.
    
 4. Implemented a "Secure Delete" method in the "Reset Data" function.
-   How this "Secure Delete" works is by "Overwriting" the file to be deleted 3 times (you can change this if you want, more info in "IMPORTANT.txt"), and only then the file gets deleted.
+   How this "Secure Delete" works is by "Overwriting" the file to be deleted 3 times (you can change this if you want, more info in "IMPORTANT-eng.txt"), and only then the file gets deleted.
    The goal is to make sure the deleted file can't be retrieved by any means or methods (fingers crossed).
    
 5. Added a warning message every time you input the Master Password, basically saying "Verification might take longer due to security improvements".
-   This is because the parameters we're using are pretty much maxed out (more details in the "IMPORTANT.txt" file).
+   This is because the parameters we're using are pretty much maxed out (more details in the "IMPORTANT-eng.txt" file).
    
 6. And a bunch of other small changes (come on, you don't expect me to list every single one, do you? -_-).
+
+Version 3.1:
+1. Added a "search" feature in the "View Passwords" and "Delete Passwords" functions, but it's just for now (more info in "author_note-eng.txt"):
+   The way this "search" feature works is by finding the closest password name based on the User's input, with:
+   - Case INsensitive, and
+   - Space INsensitive.
+
+2. Added a feature to "update" existing passwords:
+   So this feature only kicks in when the User inputs a password that already exists.
+
+3. Beefed up the "Duplicate Entry" error message, which used to be just Case INsensitive, now it's Case INsensitive + Space INsensitive.
+
+4. Fixed an error in the "Random Password Generator" feature, caused by forgetting to import the "string" module in the program (hehe, my bad).
