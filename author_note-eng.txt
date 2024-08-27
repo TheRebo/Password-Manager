@@ -1,6 +1,28 @@
-Sorry I haven't Updated in ages, it's been at least 3 months since my last update (actually a bit less than that, but I just didn't push it to Github, hehe).
+Version 3.0:
+Sorry I haven't Updated in ages, it's been at least 3 months since my last update -
+(actually a bit less than that, but I just didn't push it to Github, hehe).
 
 There's actually a ton of stuff I wanted to add or change, both features and other things.
-But since this program is already pushing 1000 lines (with some help from the formatter, hehe), it's gonna be harder to implement new features or stuff in this program (also 'cause I'm a noob).
+But since this program is already pushing 1000 lines (with some help from the formatter, hehe),
+it's gonna be harder to implement new features or stuff in this program (also 'cause I'm a noob).
 
 But stay tuned for future updates anyway (who knows, maybe the next update will be next year lol).
+
+Version 3.1:
+Okay, so this update is kinda "small" (don't blame me, blame my mood).
+
+Just remember.
+The new "features" in this update are pretty much temporary,
+like, they're gonna change in the next few updates... maybe?
+I was planning to make it like— whoops... almost spilled the beans! LOL
+
+And just so you know.
+I didn't do a ton of testing for the new features in this version, so... yeah... you get the idea, hehe.
+
+Some of you might not be on board with this Case and Space INsensitive thing,
+but in my opinion, it might be more effective this way,
+but hey... I'm open to feedback, suggestions, and criticism —
+(as long as you use something that ALL SANE HUMAN BEINGS DEFINITELY HAVE, which is MANNERS and POLITENESS).
+
+Oh yeah, now this program has officially hit 1000 lines of code! (997, well... just three short, no biggie),
+although *ahem* with some help from the formatter *AHEM*, but still, this is an achievement for me! (What? You want me to say "us"?).
