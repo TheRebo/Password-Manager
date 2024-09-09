@@ -1,12 +1,14 @@
 # 🛡️ Smart Password Manager
 
+![a-sleek-modern-logo-for-a-password-manager-app-fea-CSmX-2HjSWOqdJlF_ibDkA-cl-qv_QoQd2dNj2M5-TR0Q](https://github.com/user-attachments/assets/5f130cc4-c6ab-4509-af84-2b74c7e75492)
+
 ## 🚀 Program Description
 
 [![License](https://img.shields.io/badge/License-AGPLv3-blue.svg)](https://www.gnu.org/licenses/agpl-3.0)
 
 **Smart Password Manager** is a sophisticated Python script designed to securely store, view, and manage your passwords for various services. This tool ensures that your sensitive information is well-protected using advanced encryption methods.
 
-> **Note:** For Indonesian users, please check the Branch, because there are Indonesian translations available. (**Translations for v3.0 will follow soon!**)
+> **Note:** For Indonesian users, please check the Branch, because there are Indonesian translations available. (**Translations for v3.0+ will follow soon after final update! (maybe)**)
 
 ---
 
@@ -75,6 +77,9 @@
 ```markdown
 ## [W.I.P] (Work In Progress)
 Too many to list, just stay tuned!
+
+## [v3.15.0] - 2024-09-08
+In changelog file.
 
 ## [v3.1.0] - 2024-08-27
 In changelog file.
