@@ -140,9 +140,23 @@ def decrypt_data(encrypted_data, key):
         return None
 
 
-def generate_password(length):
-    """Generate a random password using secrets."""
-    characters = string.ascii_letters + string.digits + string.punctuation
+def generate_password(length, options):
+    """Generate a random password using secrets and with customizable options."""
+
+    characters = ""
+
+    if "L" in options:
+        characters += string.ascii_lowercase
+    if "U" in options:
+        characters += string.ascii_uppercase
+    if "D" in options:
+        characters += string.digits
+    if "S" in options:
+        characters += string.punctuation
+
+    if not characters:
+        raise ValueError("No valid options selected to generate password.")
+
     password = "".join(secrets.choice(characters) for _ in range(length))
     return password
 
@@ -193,12 +207,14 @@ def search_passwords(passwords, key, search_term):
     results = {}
     normalized_search = normalize_string(search_term)
 
+    # Exact and partial matches
     for service, encrypted_data in passwords.items():
         if normalized_search in normalize_string(service):
             decrypted_data = decrypt_data(encrypted_data, key)
             if decrypted_data:
                 results[service] = json.loads(decrypted_data.decode("utf-8"))
 
+    # If no results, try to find close matches
     if not results:
         normalized_services = {normalize_string(s): s for s in passwords.keys()}
         close_matches = get_close_matches(
@@ -227,8 +243,8 @@ def create_master_password():
     console.print(
         Panel(
             "[bold green]Welcome to the Smart Password Manager! :smiley:[/]\n\n"
-            "[bold]This script lets you securely store, view, and manage your passwords for different services."
-            "To get started, you'll need to create a strong Master Password.\n\n[/]"
+            "[bold]This script lets you securely store, view, and manage your passwords for different services.\n\n[/]"
+            "[bold]To get started, you'll need to create a strong Master Password.\n\n[/]"
             "[bold red]Remember, your Master Password is the key to all your stored passwords. "
             "There's no way to recover it if you forget it! :fearful:[/]\n\n"
             "[bold yellow]Note: The password creation process might take a few seconds for enhanced security.[/]",
@@ -407,16 +423,59 @@ def add_password(key):
 
         create_random = Confirm.ask("[bold yellow]Create a random password?[/]")
         pause_and_space()
+
         if create_random:
             length = Prompt.ask(
                 "[bold yellow]Enter the length of the password (8-32)[/]",
                 console=console,
             )
             pause_and_space()
+
             try:
                 length = int(length)
                 if 8 <= length <= 32:
-                    password = generate_password(length)
+                    console.print(
+                        Panel(
+                            "[bold yellow]Enter options for password generation:[/]\n"
+                            "[bold yellow]L = lowercase, U = uppercase, D = digits, S = symbols[/]\n"
+                            "[bold yellow](e.g., 'LUD' for a password with lowercase, uppercase, and digits)[/]",
+                            title="[bold yellow]Password Options[/]",
+                            title_align="center",
+                            padding=(1, 2),
+                            border_style="yellow",
+                        ),
+                        justify="center",
+                    )
+
+                    options = Prompt.ask(
+                        "[bold yellow]Enter your selection (L, U, D, S)[/]"
+                    )
+                    pause_and_space()
+
+                    options = options.upper()
+                    valid_options = set("LUDS")
+                    selected_options = set(options)
+
+                    if (
+                        not selected_options.issubset(valid_options)
+                        or len(selected_options) == 0
+                    ):
+                        console.print(
+                            Panel(
+                                "[bold red]Invalid options entered. Use only 'L', 'U', 'D', 'S'.[/]\n"
+                                "[bold yellow]L = lowercase, U = uppercase, D = digits, S = symbols[/]",
+                                title="[bold red]Invalid Input[/]",
+                                title_align="center",
+                                padding=(1, 2),
+                                border_style="red",
+                            ),
+                            justify="center",
+                        )
+                        pause_and_space()
+                        return
+
+                    password = generate_password(length, options)
+
                     console.print(
                         Panel(
                             f"[bold green]Your random password for [bold underline green]{service}[/] is [bold underline green]{password}[/] :game_die:[/]",
@@ -432,7 +491,7 @@ def add_password(key):
                     console.print(
                         Panel(
                             "[bold red]Password length should be between 8 and 32. :pensive:[/]",
-                            title="[bold red]Invalid Length",
+                            title="[bold red]Invalid Length[/]",
                             title_align="center",
                             padding=(1, 2),
                             border_style="red",
@@ -445,7 +504,7 @@ def add_password(key):
                 console.print(
                     Panel(
                         "[bold red]Invalid input for password length. Please enter a number between 8 and 32. :pensive:[/]",
-                        title="[bold red]Invalid Input",
+                        title="[bold red]Invalid Input[/]",
                         title_align="center",
                         padding=(1, 2),
                         border_style="red",
