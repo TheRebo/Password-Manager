@@ -26,3 +26,15 @@ but hey... I'm open to feedback, suggestions, and criticism —
 
 Oh yeah, now this program has officially hit 1000 lines of code! (997, well... just three short, no biggie),
 although *ahem* with some help from the formatter *AHEM*, but still, this is an achievement for me! (What? You want me to say "us"?).
+
+Version 3.15:
+...... Yeahhh.... This is an even smaller update than before... hehe...
+Actually, this could be considered just a "installment" update, because I think it might be better to do it in installments.
+
+Because in my agenda, there are two more updates that I'll be working on.
+And possibly, POSSIBLY, mind you. These two updates will be the last ones for this program (if there are no bugs, hehe).
+
+If I may be honest... there are actually several features that I want to add (besides the ones mentioned above),
+but... it might be a bit difficult for me to work on (because I'm a noob).
+
+But well! We'll just have to wait and see how it turns out!
