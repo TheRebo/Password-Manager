@@ -32,3 +32,10 @@ Version 3.1:
 3. Beefed up the "Duplicate Entry" error message, which used to be just Case INsensitive, now it's Case INsensitive + Space INsensitive.
 
 4. Fixed an error in the "Random Password Generator" feature, caused by forgetting to import the "string" module in the program (hehe, my bad).
+
+Version 3.15:
+Adding the ability to customize random passwords that will be created in the "Random Password Generator".
+
+Yes! that's all!, now shoo shoo!, go on!
+
+(Why so little?, more info in "author_note-eng.txt".)
