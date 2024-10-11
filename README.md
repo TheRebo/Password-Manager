@@ -2,7 +2,7 @@
 
 ![Smart Password Manager Logo](https://github.com/user-attachments/assets/5f130cc4-c6ab-4509-af84-2b74c7e75492)
 
-[![License](https://img.shields.io/badge/License-AGPLv3-blue.svg)](https://www.gnu.org/licenses/agpl-3.0)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 <div align="center">
   <h1>
@@ -120,7 +120,7 @@ All files use secure encryption and are only accessible with your master passwor
 - **UI Framework**: Rich (Terminal UI)
 
 ## 📜 License
-This project is licensed under the GNU Affero General Public License v3.0 - see the [LICENSE](https://www.gnu.org/licenses/agpl-3.0.html) file for details.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ## 👥 Contributing
 Contributions are welcome! Please feel free to submit a Pull Request.
@@ -129,10 +129,11 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 If you encounter any issues or have questions, please open an issue on GitHub.
 
 ## ⚠️ Disclaimer
+This password manager is provided for personal use only.
+The creator is not responsible for any data loss or security breaches that may occur from using this software.
 This project was aided by AI and human collaboration. While every effort has been made to ensure its security and functionality, use it at your own risk.
 
 ## 📝 Changelog
-
 ```markdown
 ## [W.I.P] (Work In Progress)
 Too many to list, just stay tuned!
