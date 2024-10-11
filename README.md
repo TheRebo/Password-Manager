@@ -28,7 +28,7 @@
 - [📜 License](#-license)
 - [👥 Contributing](#-contributing)
 - [📞 Support](#-support)
-- [⚠️ Disclaimer](-#disclaimer)
+- [⚠️ Disclaimer](#-disclaimer)
 - [📝 Changelog](#-changelog)
 
 ## 🌟 Key Features
