@@ -1,78 +1,137 @@
 # 🛡️ Smart Password Manager
 
-![a-sleek-modern-logo-for-a-password-manager-app-fea-CSmX-2HjSWOqdJlF_ibDkA-cl-qv_QoQd2dNj2M5-TR0Q](https://github.com/user-attachments/assets/5f130cc4-c6ab-4509-af84-2b74c7e75492)
-
-## 🚀 Program Description
+![Smart Password Manager Logo](https://github.com/user-attachments/assets/5f130cc4-c6ab-4509-af84-2b74c7e75492)
 
 [![License](https://img.shields.io/badge/License-AGPLv3-blue.svg)](https://www.gnu.org/licenses/agpl-3.0)
 
-**Smart Password Manager** is a sophisticated Python script designed to securely store, view, and manage your passwords for various services. This tool ensures that your sensitive information is well-protected using advanced encryption methods.
-
-> **Note:** For Indonesian users, please check the Branch, because there are Indonesian translations available. (**Translations for v3.0+ will follow soon after final update! (maybe)**)
-
----
-
-## ✨ Features
-
-- 🔒 **Secure Storage**: Store your passwords with `256-bit AES` encryption.
-- 🗂️ **Easy Management**: View and delete passwords effortlessly.
-- 🔑 **Master Password Protection**: Secure your data with a strong master password.
-- 🎲 **Random Password Generation**: Create strong passwords using the built-in generator.
-- ⏰ **Timestamp Tracking:** Each password entry is timestamped, so you know when it was added.
-- 💻 **Rich UI**: Interactive command-line interface using `rich`.
+<div align="center">
+  <h1>
+    A sophisticated, secure, and user-friendly command-line password manager built with Python.
+    Ensuring your passwords remain private and protected with military-grade encryption.
+  </h1>
+</div>
 
 ---
-
-## 🌟 Highlighted Features
-
-- 🔐 **Advanced Encryption**: Uses `Argon2id` for hashing and key derivation, and `AES-GCM` for encryption and decryption.
-- 🖥️ **User-Friendly Interface**: Leverages `rich` for a visually appealing CLI experience.
-- 🖥️ **Cross-Platform Compatibility**: Works seamlessly on Windows, macOS, and Linux.
-
+> **Note:** For Indonesian users, please check the Branch for Indonesian translations. (Translations for v3.0+ will follow soon after I finished a BIG update!)
 ---
+
+## 📑 Table of Contents
+- [🌟 Key Features](#-key-features)
+- [🔒 Security Features](#-security-features)
+- [🛠️ Installation](#️-installation)
+- [📖 Usage Guide](#-usage-guide)
+- [🔄 Program Flow](#-program-flow)
+- [📁 File Structure](#-file-structure)
+- [❓ FAQ](#-faq)
+- [⚠️ Limitations & Warnings](#️-limitations--warnings)
+- [🔍 Technical Details](#-technical-details)
+- [📜 License](#-license)
+- [👥 Contributing](#-contributing)
+- [📞 Support](#-support)
+- [⚠️ Disclaimer](-#disclaimer)
+- [📝 Changelog](#-changelog)
+
+## 🌟 Key Features
+- **Secure Storage**: Uses military-grade 256-bit AES encryption
+- **Master Password Protection**: Single secure key for all your passwords
+- **Random Password Generation**: Create strong, customizable passwords
+- **Search Functionality**: Easily find stored passwords
+- **Timestamp Tracking**: Know when each password was added or modified
+- **Data Reset Options**: Securely erase all data when needed
+- **Cross-Platform**: Works on Windows, macOS, and Linux
+
+## 🔒 Security Features
+- **Zero Trust Architecture**: Your passwords never leave your device
+- **No Third-Party Sharing**: I never see or store your passwords
+- **Strong Encryption**: Uses Argon2id for key derivation and AES-GCM for encryption
+- **Secure Deletion**: Overwrites files before deletion for added security
+
+### 🔐 Password Strength Simulation
+The program encryption process:
+1. **Master Password** → Argon2id hashing (memory-hard function)
+2. **Generated Key** → 256-bit AES encryption
+3. **Stored Passwords** → Encrypted with AES-GCM
+
+Time to crack (estimated):
+- Weak password (8 chars): Several years
+- Strong password (12+ chars): Millions of years
 
 ## 🛠️ Installation
-
 1. Clone the repository:
-    ```bash
-    git clone https://github.com/TheRebo/Password-Manager.git
-    cd Password-Manager
-    ```
-2. Install the required dependencies:
-    ```bash
-    pip install -r requirements.txt
-    ```
+   ```bash
+   git clone https://github.com/TheRebo/Password-Manager.git
+   cd Password-Manager
+   ```
+2. Install dependencies:
+   ```bash
+   pip install -r requirements.txt
+   ```
 
----
+## 📖 Usage Guide
+1. Run the program:
+   ```bash
+   python pass-man.py
+   ```
+2. Create a strong master password
+3. Use the interactive menu to:
+   - Add new passwords
+   - View stored passwords
+   - Delete passwords
+   - Change master password
+   - Reset data if needed
 
-## 📖 Usage
+## 🔄 Program Flow
+![mermaid-flow](https://github.com/user-attachments/assets/d64645e4-4f69-4fe7-9aa8-c267f727fde2)
+*I really apologize for the blurry pictures, hopefully you can still read them.
 
-1. Run the script:
-    ```bash
-    python pass-man.py
-    ```
-2. Follow the on-screen prompts to create a master password and manage your passwords.
+## 📁 File Structure
+- `passwords.dat`: Encrypted storage of your passwords
+- `master_password.dat`: Hashed master password
+- `key.dat`: Encrypted key file
+- `salt.dat`: Cryptographic salt
 
----
+All files use secure encryption and are only accessible with your master password.
 
-## 📚 Things to Know
+## ❓ FAQ
+1. **Q: What happens if I forget my master password?**  
+   A: There is no recovery option. Your data is unrecoverable without the master password.
 
-- 🔑 Your master password is the key to all your stored passwords. **There is no way to recover it if you forget it.**
-- 🔒 Passwords are stored in an encrypted format in the `passwords.dat` file.
-- 🔒 The master password hash and encryption key are stored in `master_password.dat` and `key.dat` files, respectively.
-- 🧂 The salt are stored in `salt.dat`.
+2. **Q: Is my data synced to the cloud?**  
+   A: No, all data is stored locally for maximum security.
 
----
+3. **Q: Can the developer access my passwords?**  
+   A: No, your passwords are encrypted locally and never transmitted anywhere.
 
-## 🚫 Don'ts
+## ⚠️ Limitations & Warnings
+- **No Password Recovery**: Your master password cannot be recovered if forgotten
+- **Local Storage Only**: No cloud sync or backup features
+- **CLI Interface**: No graphical user interface
 
-- 🚷 **Do Not Forget Your Master Password**: There's no way to recover it if you forget it!
-- 🛡️ **Do Not Share Your Master Password**: Keep your master password confidential to ensure security.
-- 🚫 **Do Not Delete or Edit the Files Mentioned Above Manually!**: If You don't want to corrupt Your data!.
+## 🚫 What Not to Do
+- **Don't** forget your master password
+- **Don't** share your master password
+- **Don't** manually edit the data files
+- **Don't** attempt to decrypt files outside the program
 
----
+## 🔍 Technical Details
+- **Language**: Python 3.7+
+- **Encryption**: AES-256-GCM
+- **Key Derivation**: Argon2id (time-cost=16, memory-cost=2^18)
+- **UI Framework**: Rich (Terminal UI)
 
-## 📌 Changelog
+## 📜 License
+This project is licensed under the GNU Affero General Public License v3.0 - see the [LICENSE](https://www.gnu.org/licenses/agpl-3.0.html) file for details.
+
+## 👥 Contributing
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+## 📞 Support
+If you encounter any issues or have questions, please open an issue on GitHub.
+
+## ⚠️ Disclaimer
+This project was aided by AI and human collaboration. While every effort has been made to ensure its security and functionality, use it at your own risk.
+
+## 📝 Changelog
 
 ```markdown
 ## [W.I.P] (Work In Progress)
@@ -109,24 +168,5 @@ From now on the changelog will be included along with the program file.
 ## [v1.0.0] - 2023-11-18
 - Initial Released :)
 ```
----
 
-## 📜 License
-
-**Smart Password Manager** is licensed under the GNU Affero General Public License v3.0. You are free to use, modify, and distribute this software under the terms of the AGPL-3.0 license. For more details, see [LICENSE](https://www.gnu.org/licenses/agpl-3.0.html).
-
----
-
-## ⚠️ Disclaimer
-
-This project was aided by AI and human collaboration. While every effort has been made to ensure its security and functionality, use it at your own risk.
-
----
-
-## ❤️ Made By
-
-Developed by Na'im Annafi Santosa ([TheRebo](https://github.com/TheRebo)).
-
----
-
-Thank you for using **Smart Password Manager**! Your feedback and contributions are welcome.
+# Made with ❤️ by Na'im Annafi Santosa ([TheRebo](https://github.com/TheRebo))
