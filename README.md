@@ -11,6 +11,14 @@
   </h1>
 </div>
 
+<p align="center">
+  <strong>
+    <em>
+      "Securing Your Digital Life with Precision, Guarding Your Privacy with Dedication"
+    </em>
+  </strong>
+</p>
+
 ---
 > **Note:** For Indonesian users, please check the Branch for Indonesian translations. (Translations for v3.0+ will follow soon after I finished a BIG update!)
 ---
