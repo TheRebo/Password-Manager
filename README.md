@@ -40,19 +40,30 @@
 - [📝 Changelog](#-changelog)
 
 ## 🌟 Key Features
-- **Secure Storage**: Uses military-grade 256-bit AES encryption
-- **Master Password Protection**: Single secure key for all your passwords
-- **Random Password Generation**: Create strong, customizable passwords
-- **Search Functionality**: Easily find stored passwords
-- **Timestamp Tracking**: Know when each password was added or modified
-- **Data Reset Options**: Securely erase all data when needed
-- **Cross-Platform**: Works on Windows, macOS, and Linux
+- **Advanced Encryption**: Military-grade AES-256-GCM encryption with Argon2id key derivation
+- **Secure Memory Management**: *Protected memory allocation and secure wiping
+- **Side-Channel Attack Protection**: *Timing attack defenses and constant-time operations
+- **Smart Search**: Fuzzy matching for password lookup
+- **Async Operations**: Modern asynchronous design for better performance
+- **Comprehensive UI**: Rich terminal interface with intuitive controls
+- **Secure Password Generation**: Customizable strong password creation
+- **Data Protection**: Secure file operations with proper cleanup
+- **Cross-Platform**: **Works on Windows, macOS, and Linux
+
+*using temporary methods
+
+**while you can install Python 3.7+ and its dependencies properly
 
 ## 🔒 Security Features
-- **Zero Trust Architecture**: Your passwords never leave your device
-- **No Third-Party Sharing**: I never see or store your passwords
-- **Strong Encryption**: Uses Argon2id for key derivation and AES-GCM for encryption
-- **Secure Deletion**: Overwrites files before deletion for added security
+- **Zero Trust Architecture**: All data encrypted locally
+- **Memory Protection**: *Secure allocation and wiping of sensitive data
+- **Side-Channel Defense**: *Protection against timing and other side-channel attacks
+- **Secure Key Derivation**: Argon2id with high memory and time cost parameters
+- **Protected Storage**: *Encrypted file storage with secure deletion
+- **Constant-Time Operations**: *Cryptographic operations resistant to timing analysis
+- **Session Security**: Secure key handling during program runtime
+
+*using temporary methods
 
 ### 🔐 Password Strength Simulation
 The program encryption process:
@@ -89,8 +100,10 @@ Time to crack (estimated):
    - Reset data if needed
 
 ## 🔄 Program Flow
-![mermaid-flow](https://github.com/user-attachments/assets/d64645e4-4f69-4fe7-9aa8-c267f727fde2)
-*I really apologize for the blurry pictures, hopefully you can still read them.
+![flowchart-mermaid](https://github.com/user-attachments/assets/a94f5c48-e3e8-4fe4-adc8-a405cf0295b7)
+*this flowchart only illustrates the main flow of the program.
+
+**and sorry for the white background (⁠.⁠ ⁠❛⁠ ⁠ᴗ⁠ ⁠❛⁠.⁠)
 
 ## 📁 File Structure
 - `passwords.dat`: Encrypted storage of your passwords
@@ -124,7 +137,7 @@ All files use secure encryption and are only accessible with your master passwor
 ## 🔍 Technical Details
 - **Language**: Python 3.7+
 - **Encryption**: AES-256-GCM
-- **Key Derivation**: Argon2id (time-cost=16, memory-cost=2^18)
+- **Key Derivation**: Argon2id (time-cost=16, memory-cost=2^18, parallelism=2)
 - **UI Framework**: Rich (Terminal UI)
 
 ## 📜 License
@@ -145,6 +158,9 @@ This project was aided by AI and human collaboration. While every effort has bee
 ```markdown
 ## [W.I.P] (Work In Progress)
 Too many to list, just stay tuned!
+
+## [v4.0.0] - 2024-10-28
+In changelog file.
 
 ## [v3.15.0] - 2024-09-08
 In changelog file.
