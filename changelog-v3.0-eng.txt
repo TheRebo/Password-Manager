@@ -1,5 +1,4 @@
 Version 3.0:
-
 1. Completely swapped out the algorithms used for "Hashing" and "KDF" (Key Derive Function).
    We used to use the "PBKDF2HMAC" algorithm for both functions, but now we've switched entirely to the "Argon2id" algorithm for both.
 
@@ -29,7 +28,7 @@ Version 3.1:
 2. Added a feature to "update" existing passwords:
    So this feature only kicks in when the User inputs a password that already exists.
 
-3. Beefed up the "Duplicate Entry" error message, which used to be just Case INsensitive, now it's Case INsensitive + Space INsensitive.
+3. Beefed up the "Duplicate Entry" (now the name is "Existing Entry") error message, which used to be just Case INsensitive, now it's Case INsensitive + Space INsensitive.
 
 4. Fixed an error in the "Random Password Generator" feature, caused by forgetting to import the "string" module in the program (hehe, my bad).
 
@@ -39,3 +38,12 @@ Adding the ability to customize random passwords that will be created in the "Ra
 Yes! that's all!, now shoo shoo!, go on!
 
 (Why so little?, more info in "author_note-eng.txt".)
+
+Version 4.0:
+1. COMPLETELY REFACTORED THE PROGRAM CODE.
+2. Added Memory protection *(Temporary mechanism).
+3. Added protection against Side-Channel Attacks *(Temporary mechanism).
+4. Now using Async.
+5. Improved overall security.
+6. Boosted overall performance.
+7. And MANY other things that I can't list one by one here (feel free to check the program code yourself).
