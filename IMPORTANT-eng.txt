@@ -1,4 +1,4 @@
-1. You can change how many times the files get "Overwritten" in this line "for _ in range(3):" in the "secure_delete_file" function. The "3" in that line is the number of times the files get "Overwritten".
+1. You can change how many times the files get "Overwritten" in this line "for _ in range(3):" in the "secure_delete" function. The "3" in that line is the number of times the files get "Overwritten".
 
 2. The parameters used in the "Hashing" and "KDF" functions are maxed out (for the average user), so if you feel it's too "heavy", you can tone it down yourself (please don't just change stuff randomly, at least do some research first). Or if you think it's too "light" (tch), you can crank it up yourself.
 
