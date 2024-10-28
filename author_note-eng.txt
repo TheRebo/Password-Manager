@@ -38,3 +38,12 @@ If I may be honest... there are actually several features that I want to add (be
 but... it might be a bit difficult for me to work on (because I'm a noob).
 
 But well! We'll just have to wait and see how it turns out!
+
+Version 4.0:
+This is a big update, and if I'm being honest... this actually isn't the big update I originally planned.
+And because of this update, my original plan for the big update... will be delayed again... just by 1 update though... hopefully.
+
+Why the delay? Well, because I'm not quite "satisfied" with the methods used in the new mechanisms in this update.
+So I'll be releasing one more update, which hopefully will make me "satisfied" and able to focus on the big update I planned in the beginning.
+
+So stay tuned!
